@@ -1,0 +1,7 @@
+extends ../layouts/index.pug
+
+block content
+  each course in courses || []
+    div
+      a(href=`/courses/${course.id}`)= course.title
+  a(href='/courses/new') Создать

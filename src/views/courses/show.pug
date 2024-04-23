@@ -1,0 +1,11 @@
+extends ../layouts/index.pug
+
+block content
+  div= course.title
+  div= course.description
+  a.btn.btn-primary.me-1(href=`/courses/${course.id}/edit`)= "Редактировать"
+  form(action=`/courses/${course.id}`, method="post")
+    input(name="_method" type="hidden" value="DELETE")
+    input(type='submit', value="Удалить", class="btn btn-danger")
+
+  

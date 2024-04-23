@@ -1,0 +1,12 @@
+extends ../layouts/index.pug
+
+block content
+  form(action = '/courses', method = 'post')
+    div
+      label Название:
+        input(type = 'text', name = 'title', value = course.title)
+    div
+      label Описание:
+        textarea(type = 'text', name = 'description')= course.description
+    input(name="_method" type="hidden" value="patch")
+    input(type = 'submit', value = 'Сохранить')

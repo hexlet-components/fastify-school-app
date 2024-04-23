@@ -1,0 +1,18 @@
+extends ../layouts/index.pug
+
+block content
+  form(action = '/users', method = 'post')
+    div
+      label Имя:
+        input(type = 'text', name = 'name', value = user.name)
+    div
+      label Email:
+        input(type = 'email', name = 'email', value = user.email, required = true)
+    div
+      label Пароль:
+        input(type = 'password', name = 'password', value = user.password, required = true)
+    div
+      label Подтверждение пароля:
+        input(type = 'password', name = 'passwordConfirmation', value = user.passwordConfirmation, required = true)
+    input(name="_method" type="hidden" value="patch")
+    input(type = 'submit', value = 'Сохранить')

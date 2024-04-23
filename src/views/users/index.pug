@@ -1,0 +1,7 @@
+extends ../layouts/index.pug
+
+block content
+  each user in users || []
+    div
+      a(href=`/users/${user.id}`)= user.name
+  a(href='/users/new') Создать

@@ -1,0 +1,10 @@
+extends ../layouts/index.pug
+
+block content
+  div= user.name
+  div= user.email
+  a.btn.btn-primary.me-1(href=`/users/${user.id}/edit`)= "Редактировать"
+  form(action=`/users/${user.id}`, method="post")
+    input(name="_method" type="hidden" value="DELETE")
+    input(type='submit', value="Удалить", class="btn btn-danger")
+  

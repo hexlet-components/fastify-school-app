@@ -1,0 +1,31 @@
+{
+  "name": "fastify-test",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@fastify/cookie": "^9.3.1",
+    "@fastify/flash": "^5.1.0",
+    "@fastify/formbody": "^7.4.0",
+    "@fastify/middie": "^8.3.0",
+    "@fastify/secure-session": "^7.1.0",
+    "@fastify/session": "^10.7.0",
+    "@fastify/view": "^8.2.0",
+    "body-parser": "^1.20.2",
+    "cookie-parser": "^1.4.6",
+    "fastify": "^4.26.0",
+    "fastify-reverse-routes": "^3.0.0",
+    "morgan": "^1.10.0",
+    "pug": "^3.0.2",
+    "sanitize-html": "^2.11.0",
+    "sqlite3": "^5.1.7",
+    "yup": "^1.4.0"
+  }
+}
