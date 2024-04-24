@@ -1,17 +1,26 @@
 extends ../layouts/index.pug
 
 block content
-  form(action = '/users', method = 'post')
-    div
-      label Имя:
-        input(type = 'text', name = 'name', value = name)
-    div
-      label Email:
-        input(type = 'email', name = 'email', value = email, required = true)
-    div
-      label Пароль:
-        input(type = 'password', name = 'password', value = password, required = true)
-    div
-      label Подтверждение пароля:
-        input(type = 'password', name = 'passwordConfirmation', value = passwordConfirmation, required = true)
-    input(type = 'submit', value = 'Зарегистрировать')
+  .row.justify-content-center
+    .col-12.col-md-8
+      .card.shadow-sm
+        .card-body.row.p-5
+          .col-12.col-md-6.mt-3.mt-mb-0
+            form(action="/users" method='post')
+              .form-floating.mb-3
+                input.form-control(id= "name" name= "name")
+                label(for= "name") Имя
+
+              .form-floating.mb-3
+                input.form-control(id= "email" name= "email")
+                label(for= "title") Емейл
+
+              .form-floating.mb-3
+                input.form-control(id= "password" name= "password")
+                label(for= "password") Пароль
+
+              .form-floating.mb-3
+                input.form-control(id= "passwordConfirmation" name= "passwordConfirmation")
+                label(for= "passwordConfirmation") Подтверждение пароля
+
+              input(class='btn btn-primary' type='submit' value= 'Создать')

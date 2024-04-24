@@ -1,12 +1,19 @@
 extends ../layouts/index.pug
 
 block content
-  form(action = '/courses', method = 'post')
-    div
-      label Название:
-        input(type = 'text', name = 'title', value = course.title)
-    div
-      label Описание:
-        textarea(type = 'text', name = 'description')= course.description
-    input(name="_method" type="hidden" value="patch")
-    input(type = 'submit', value = 'Сохранить')
+  .row.justify-content-center
+    .col-12.col-md-8
+      .card.shadow-sm
+        .card-body.row.p-5
+          .col-12.col-md-6.mt-3.mt-mb-0
+            form(action="/courses" method='post')
+              .form-floating.mb-3
+                input.form-control(id= "title" name= "title" value= course.title)
+                label(for= "title") Название
+
+              .mb-3
+                label(for= "description") Описание
+                textarea.form-control(id= "description" name= "description")= course.description
+
+              input(name="_method" type="hidden" value="patch")
+              input(class='btn btn-primary' type='submit' value= 'Сохранить')

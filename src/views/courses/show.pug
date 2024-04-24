@@ -1,11 +1,18 @@
 extends ../layouts/index.pug
 
 block content
-  div= course.title
-  div= course.description
-  a.btn.btn-primary.me-1(href=`/courses/${course.id}/edit`)= "Редактировать"
-  form(action=`/courses/${course.id}`, method="post")
-    input(name="_method" type="hidden" value="DELETE")
-    input(type='submit', value="Удалить", class="btn btn-danger")
-
-  
+  div.row.mt-5.p-5.shadow.bg-white
+    div.col-12.col-md-8.order-2.order-md-1
+      div.lead.fw-normal.mb-4= task.description
+    div.col-12.col-md-4.border-start.px-3.order-1.order-md-2.mb-3.mb-md-0
+      div.d-flex.flex-wrap.mb-3
+        span.text-muted.me-2 Название
+        span= course.title
+      div.d-flex.flex-wrap.mb-3
+        span.text-muted.me-2 Описание
+        span= course.description
+      div.d-flex.flex-wrap
+        a.btn.btn-primary.me-1(href=`/courses/${course.id}/edit`) Редактировать
+        form(action=`/courses/${course.id}`, method="post")
+          input(name="_method" type="hidden" value="DELETE")
+          input(type='submit', value="Удалить", class="btn btn-danger")

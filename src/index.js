@@ -24,14 +24,14 @@ export default () => {
     db.serialize(() => {
       db.run(`
         CREATE TABLE courses (
-          id INT PRIMARY KEY,
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
           title VARCHAR(255) NOT NULL,
           description TEXT
         )
       `);
       db.run(`
         CREATE TABLE users (
-          id INT PRIMARY KEY,
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
           name VARCHAR(255) NOT NULL,
           email VARCHAR(255) NOT NULL,
           password VARCHAR(255) NOT NULL
