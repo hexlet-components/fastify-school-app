@@ -1,7 +1,28 @@
 extends ../layouts/index.pug
 
+block header
+  = "Список пользователей"
+
 block content
-  each user in users || []
-    div
-      a(href=`/users/${user.id}`)= user.name
-  a(href='/users/new') Создать
+  a.btn.btn-primary.mb-5(href="/courses/new") Новый курс
+
+  div.table-responsive
+    table.table.table-borderless.table-striped.mt-5.bg-white
+      thead
+        tr
+          th Идентификатор
+          th Имя
+          th Емейл
+          th Действия
+      tbody
+        each user in users
+          tr
+            td= user.id
+            td= user.name
+            td= user.email
+            td
+              .d-flex.flex-wrap
+                a.btn.btn-primary.me-1(href=`/users/${user.id}/edit`) Редактировать
+                form(action=`/users/${user.id}`, method="post")
+                  input(name="_method" type="hidden" value="DELETE")
+                  input(type='submit', value="Удалить", class="btn btn-danger")

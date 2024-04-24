@@ -1,7 +1,28 @@
 extends ../layouts/index.pug
 
+block header
+  = "Список пользователей"
+
 block content
-  each course in courses || []
-    div
-      a(href=`/courses/${course.id}`)= course.title
-  a(href='/courses/new') Создать
+  a.btn.btn-primary.mb-5(href="/courses/new") Новый курс
+
+  div.table-responsive
+    table.table.table-borderless.table-striped.mt-5.bg-white
+      thead
+        tr
+          th Идентификатор
+          th Название
+          th Действия
+      tbody
+        each course in courses
+          tr
+            td= course.id
+            td
+              a(href=`/courses/${course.id}`)= course.title
+            td
+              .d-flex.flex-wrap
+                a.btn.btn-primary.me-1(href=`/courses/${course.id}/edit`) Редактировать
+                form(action=`/courses/${course.id}`, method="post")
+                  input(name="_method" type="hidden" value="DELETE")
+                  input(type='submit', value="Удалить", class="btn btn-danger")
+
