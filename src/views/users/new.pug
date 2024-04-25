@@ -6,7 +6,7 @@ block content
       .card.shadow-sm
         .card-body.row.p-5
           .col-12.col-md-6.mt-3.mt-mb-0
-            form(action="/users" method='post')
+            form(action=route('users') method='post')
               .form-floating.mb-3
                 input.form-control(id= "name" name= "name")
                 label(for= "name") Имя

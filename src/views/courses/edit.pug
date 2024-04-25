@@ -6,7 +6,7 @@ block content
       .card.shadow-sm
         .card-body.row.p-5
           .col-12.col-md-6.mt-3.mt-mb-0
-            form(action="/courses" method='post')
+            form(action=route('course', { id: course.id }) method='post')
               .form-floating.mb-3
                 input.form-control(id= "title" name= "title" value= course.title)
                 label(for= "title") Название
@@ -15,5 +15,5 @@ block content
                 label(for= "description") Описание
                 textarea.form-control(id= "description" name= "description")= course.description
 
-              input(name="_method" type="hidden" value="patch")
+              input(name="_method" type="hidden" value="PATCH")
               input(class='btn btn-primary' type='submit' value= 'Сохранить')

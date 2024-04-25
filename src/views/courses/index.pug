@@ -4,7 +4,17 @@ block header
   = "Список курсов"
 
 block content
-  a.btn.btn-primary.mb-5(href="/courses/new") Новый курс
+  a.btn.btn-primary.mb-5(href=route('newCourse')) Новый курс
+
+  .card.shadow-sm
+    .card-body.p-4
+      form(action=route('courses') method='get')
+        .row
+          .col-12.col-md
+            label(for= 'filterTitle') Название курса
+            input.form-control(id= 'filterTitle' name= 'title')
+            
+        input(class='btn btn-primary' type='submit' value= 'Поиск')
 
   div.table-responsive
     table.table.table-borderless.table-striped.mt-5.bg-white
@@ -18,11 +28,11 @@ block content
           tr
             td= course.id
             td
-              a(href=`/courses/${course.id}`)= course.title
+              a(href=route('course', { id: course.id }))= course.title
             td
               .d-flex.flex-wrap
-                a.btn.btn-primary.me-1(href=`/courses/${course.id}/edit`) Редактировать
-                form(action=`/courses/${course.id}`, method="post")
+                a.btn.btn-primary.me-1(href=route('editCourse', { id: course.id })) Редактировать
+                form(action=route('course', { id: course.id }), method="post")
                   input(name="_method" type="hidden" value="DELETE")
                   input(type='submit', value="Удалить", class="btn btn-danger")
 

@@ -13,9 +13,9 @@ html(lang="ru")
         .collapse.navbar-collapse(id="navbarToggleExternalContent")
           ul.navbar-nav.justify-content-end
             li.nav-item
-              a.nav-link(href="/users")= "Пользователи"
+              a.nav-link(href=route('users'))= "Пользователи"
             li.nav-item
-              a.nav-link(href="/courses")= "Курсы"
+              a.nav-link(href=route('courses'))= "Курсы"
 
     .container.wrapper.flex-grow-1
       if flash && flash.warning

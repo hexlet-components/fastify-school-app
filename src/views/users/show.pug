@@ -12,8 +12,8 @@ block content
         span.text-muted.me-2 Емейл
         span= user.email
       div.d-flex.flex-wrap
-        a.btn.btn-primary.me-1(href=`/users/${user.id}/edit`) Редактировать
-        form(action=`/users/${user.id}`, method="post")
+        a.btn.btn-primary.me-1(href=route('editUser', { id: user.id })) Редактировать
+        form(action=route('users', { id: user.id }), method="post")
           input(name="_method" type="hidden" value="DELETE")
           input(type='submit', value="Удалить", class="btn btn-danger")
   

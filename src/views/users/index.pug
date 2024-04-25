@@ -4,7 +4,7 @@ block header
   = "Список пользователей"
 
 block content
-  a.btn.btn-primary.mb-5(href="/users/new") Новый пользователь
+  a.btn.btn-primary.mb-5(href=route('newUser')) Новый пользователь
 
   div.table-responsive
     table.table.table-borderless.table-striped.mt-5.bg-white
@@ -22,7 +22,7 @@ block content
             td= user.email
             td
               .d-flex.flex-wrap
-                a.btn.btn-primary.me-1(href=`/users/${user.id}/edit`) Редактировать
-                form(action=`/users/${user.id}`, method="post")
+                a.btn.btn-primary.me-1(href=route('editUser', { id: user.id })) Редактировать
+                form(action=route('user', { id: user.id }), method="post")
                   input(name="_method" type="hidden" value="DELETE")
                   input(type='submit', value="Удалить", class="btn btn-danger")

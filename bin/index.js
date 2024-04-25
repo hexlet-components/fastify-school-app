@@ -1,6 +1,6 @@
 import getApp from '../src/index.js';
 
-const app = getApp();
+const app = await getApp();
 
 const port = 3000;
 

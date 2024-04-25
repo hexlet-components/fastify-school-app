@@ -11,12 +11,13 @@ import { plugin as fastifyReverseRoutes } from 'fastify-reverse-routes';
 import flash from '@fastify/flash';
 import fastifyCookie from '@fastify/cookie';
 import fastifySession from '@fastify/secure-session';
+import fastifyMethodOverride from 'fastify-method-override';
 
 import addRoutes from './routes/index.js';
 
-export default () => {
+export default async () => {
   const __dirname = fileURLToPath(path.dirname(import.meta.url));
-  const app = fastify();
+  const app = fastify({ exposeHeadRoutes: false, logger: true });
 
   const db = new sqlite3.Database(':memory:');
 
@@ -66,26 +67,27 @@ export default () => {
 
   prepareDatabase();
 
-  addRoutes(app, db);
-
-  app.register(formbody);
-  app.register(view, {
+  await app.register(fastifyReverseRoutes);
+  await app.register(formbody);
+  await app.register(view, {
     engine: {
       pug,
     },
     templates: path.join(__dirname, 'views'),
+    defaultContext: {
+      route(name, placeholdersValues) {
+        return app.reverse(name, placeholdersValues);
+      },
+    },
   });
-  app.decorateReply('render', function render(viewPath, locals) {
-    console.log(locals);
-    this.view(viewPath, { ...locals, reply: this });
-  });
-  app.register(fastifyReverseRoutes);
-  app.register(fastifyCookie);
-  app.register(fastifySession, {
+  await app.register(fastifyCookie);
+  await app.register(fastifySession, {
     secret: 'a secret with minimum length of 32 characters',
   });
+  await app.register(fastifyMethodOverride);
 
-  app.register(flash);
+  await app.register(flash);
 
+  addRoutes(app, db);
   return app;
 };
