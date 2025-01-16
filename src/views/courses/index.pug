@@ -32,7 +32,6 @@ block content
             td
               .d-flex.flex-wrap
                 a.btn.btn-primary.me-1(href=route('editCourse', { id: course.id })) Редактировать
-                form(action=route('course', { id: course.id }), method="post")
-                  input(name="_method" type="hidden" value="DELETE")
+                form(action=`${route('course', { id: course.id })}?_method=DELETE`, method="post")
                   input(type='submit', value="Удалить", class="btn btn-danger")
 

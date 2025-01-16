@@ -11,13 +11,19 @@ import { plugin as fastifyReverseRoutes } from 'fastify-reverse-routes';
 import flash from '@fastify/flash';
 import fastifyCookie from '@fastify/cookie';
 import fastifySession from '@fastify/secure-session';
-import fastifyMethodOverride from 'fastify-method-override';
+import wrapFastify from 'fastify-method-override-wrapper';
 
 import addRoutes from './routes/index.js';
 
 export default async () => {
   const __dirname = fileURLToPath(path.dirname(import.meta.url));
-  const app = fastify({ exposeHeadRoutes: false, logger: true });
+
+  const wrappedFastify = wrapFastify(fastify);
+  const app = wrappedFastify({
+    // any fastify options, for example logger
+    logger: true,
+    exposeHeadRoutes: false,
+  });
 
   const db = new sqlite3.Database(':memory:');
 
@@ -84,7 +90,6 @@ export default async () => {
   await app.register(fastifySession, {
     secret: 'a secret with minimum length of 32 characters',
   });
-  await app.register(fastifyMethodOverride);
 
   await app.register(flash);
 

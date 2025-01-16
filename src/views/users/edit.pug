@@ -6,7 +6,7 @@ block content
       .card.shadow-sm
         .card-body.row.p-5
           .col-12.col-md-6.mt-3.mt-mb-0
-            form(action=route('user', { id: user.id }) method='post')
+            form(action=`${route('user', { id: user.id })}?_method=PATCH` method='post')
               .form-floating.mb-3
                 input.form-control(id= "name" name= "name" value= user.name)
                 label(for= "name") Имя
@@ -23,5 +23,4 @@ block content
                 input.form-control(id= "passwordConfirmation" name= "passwordConfirmation" value= user.passwordConfirmation)
                 label(for= "passwordConfirmation") Подтверждение пароля
 
-              input(name="_method" type="hidden" value="patch")
               input(class='btn btn-primary' type='submit' value= 'Сохранить')

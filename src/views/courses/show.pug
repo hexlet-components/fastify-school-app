@@ -10,7 +10,6 @@ block content
         span.text-muted.me-2 Описание
         span= course.description
       div.d-flex.flex-wrap
-        a.btn.btn-primary.me-1(href=route('course', { id: course.id })) Редактировать
-        form(action=route('course', { id: course.id }), method="post")
-          input(name="_method" type="hidden" value="DELETE")
+        a.btn.btn-primary.me-1(href=route('editCourse', { id: course.id })) Редактировать
+        form(action=`${route('course', { id: course.id })}?_method=DELETE`, method="post")
           input(type='submit', value="Удалить", class="btn btn-danger")
