@@ -14,7 +14,7 @@ export default (app, db) => {
       if (error) {
         console.error(error);
         req.flash('warning', 'Ошибка получения списка курсов');
-        res.redirect(app.reverse('courses'));
+        res.code(500);
         return;
       }
       const templateData = {
@@ -31,19 +31,15 @@ export default (app, db) => {
   // Просмотр конкретного курса
   app.get('/courses/:id', { name: 'course' },  (req, res) => {
     const { id } = req.params;
-    if (!Number.isInteger(Number(id)) || id <= 0) {
-      req.flash('warning', 'Некорректный идентификатор курса');
-      return res.redirect(app.reverse('courses'));
-    }
     db.get(`SELECT * FROM courses WHERE id = ${id}`, (error, data) => {
       if (error) {
         req.flash('warning', 'Ошибка запроса к базе данных');
-        res.redirect(app.reverse('courses'));        
+        res.code(500);
         return;
       }
       if (!data) {
         req.flash('warning', 'Курс не найден');
-        res.redirect(app.reverse('courses'));
+        res.code(404);
         return;
       }
       const templateData = {
@@ -95,10 +91,11 @@ export default (app, db) => {
       stmt.run([course.title, course.description], (err) => {
         if (err) {
           req.flash('warning', 'Ошибка создания курса');
-          res.redirect(app.reverse('newCourse'));
+          res.code(500);
           reject();
         }
         req.flash('success', 'Курс успешно создан');
+        res.code(201);
         res.redirect(app.reverse('courses'));
         resolve(true);
       });
@@ -110,8 +107,8 @@ export default (app, db) => {
     const { id } = req.params;
     db.get(`SELECT * FROM courses WHERE id = ${id}`, (error, data) => {
       if (error) {
-        req.flash('warning', 'Курс не найден');
-        res.redirect(app.reverse('courses'));
+        req.flash('warning', 'Ошибка запроса');
+        res.code(500);
         return;
       }
       const templateData = {
@@ -163,7 +160,7 @@ export default (app, db) => {
       stmt.run([course.title, course.description, id], (err) => {
         if (err) {
           req.flash('warning', 'Ошибка редактирования курса');
-          res.redirect(app.reverse('course', { id }));
+          res.code(500);
           return;
         }
         req.flash('success', 'Курс успешно отредактирован');
@@ -180,7 +177,7 @@ export default (app, db) => {
       stmt.run(id, (err) => {
         if (err) {
           req.flash('warning', 'Ошибка удаления курса');
-          res.redirect(app.reverse('course', { id }));
+          res.code(500);
           reject();
         }
         req.flash('success', 'Курс успешно удален');
