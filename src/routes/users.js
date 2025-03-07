@@ -24,8 +24,13 @@ export default (app, db) => {
     const { id } = req.params;
     db.get(`SELECT * FROM users WHERE id = ${id}`, (error, data) => {
       if (error) {
-        req.flash('warning', 'Ошибка получения списка пользователей');
+        req.flash('warning', 'Ошибка');
         res.render('index', { flash: res.flash() });
+        return;
+      }
+      if (!data) {
+        req.flash('warning', 'Пользователь не найден');
+        res.code(404);
         return;
       }
       const templateData = {

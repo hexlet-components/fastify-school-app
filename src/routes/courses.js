@@ -31,10 +31,6 @@ export default (app, db) => {
   // Просмотр конкретного курса
   app.get('/courses/:id', { name: 'course' },  (req, res) => {
     const { id } = req.params;
-    if (!Number.isInteger(Number(id)) || id <= 0) {
-      req.flash('warning', 'Некорректный идентификатор курса');
-      return res.redirect(app.reverse('courses'));
-    }
     db.get(`SELECT * FROM courses WHERE id = ${id}`, (error, data) => {
       if (error) {
         req.flash('warning', 'Ошибка запроса к базе данных');
@@ -43,7 +39,7 @@ export default (app, db) => {
       }
       if (!data) {
         req.flash('warning', 'Курс не найден');
-        res.redirect(app.reverse('courses'));
+        res.code(404);
         return;
       }
       const templateData = {
@@ -99,6 +95,7 @@ export default (app, db) => {
           reject();
         }
         req.flash('success', 'Курс успешно создан');
+        res.code(201);
         res.redirect(app.reverse('courses'));
         resolve(true);
       });
