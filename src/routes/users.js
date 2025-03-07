@@ -8,7 +8,7 @@ export default (app, db) => {
     db.all('SELECT * FROM users', (error, data) => {
       if (error) {
         req.flash('warning', 'Ошибка получения списка пользователей');
-        res.view('index', { flash: res.flash() });
+        res.code(500);
         return;
       }
       const templateData = {
@@ -25,6 +25,7 @@ export default (app, db) => {
     db.get(`SELECT * FROM users WHERE id = ${id}`, (error, data) => {
       if (error) {
         req.flash('warning', 'Ошибка');
+        res.code(500);
         res.render('index', { flash: res.flash() });
         return;
       }
@@ -94,16 +95,13 @@ export default (app, db) => {
     };
   
     const stmt = db.prepare('INSERT INTO users(name, email, password) VALUES(?, ?, ?)');
-    return new Promise((resolve, reject) => {
-      stmt.run([user.name, user.email, user.password], (err) => {
-        if (err) {
-          req.flash('warning', 'Ошибка создания пользователя');
-          res.redirect(app.reverse('newUser'));
-          reject();
-        }
-        res.redirect(app.reverse('users'));
-        resolve(true);
-      });
+    stmt.run([user.name, user.email, user.password], (err) => {
+      if (err) {
+        req.flash('warning', 'Ошибка создания пользователя');
+        res.code(500);
+        return;
+      }
+      res.redirect(app.reverse('users'));
     });
   });
 
@@ -112,8 +110,13 @@ export default (app, db) => {
     const { id } = req.params;
     db.get(`SELECT * FROM users WHERE id = ${id}`, (error, data) => {
       if (error) {
+        req.flash('warning', 'Ошибка');
+        res.code(500);
+        return;
+      }
+      if (!data) {
         req.flash('warning', 'Пользователь не найден');
-        res.redirect(app.reverse('users'));
+        res.code(404);
         return;
       }
       const templateData = {
@@ -170,17 +173,14 @@ export default (app, db) => {
     };
   
     const stmt = db.prepare('UPDATE users SET name = ?, email = ?, password = ? WHERE id = ?');
-    return new Promise((resolve, reject) => {
-      stmt.run([user.name, user.email, user.password, id], (err) => {
-        if (err) {
-          req.flash('warning', 'Ошибка редактирования пользователя');
-          res.redirect(app.reverse('user', { id }));
-          reject();
-        }
-        req.flash('success', 'Пользователь успешно отредактирован');
-        res.redirect(app.reverse('users'));
-        resolve(true);
-      });
+    stmt.run([user.name, user.email, user.password, id], (err) => {
+      if (err) {
+        req.flash('warning', 'Ошибка редактирования пользователя');
+        res.code(500);
+        return;
+      }
+      req.flash('success', 'Пользователь успешно отредактирован');
+      res.redirect(app.reverse('users'));
     });
   });
 
@@ -188,17 +188,15 @@ export default (app, db) => {
   app.delete('/users/:id', (req, res) => {
     const { id } = req.params;
     const stmt = db.prepare('DELETE FROM users WHERE id = ?');
-    return new Promise((resolve, reject) => {
-      stmt.run(id, (err) => {
-        if (err) {
-          req.flash('warning', 'Ошибка удаления пользователя');
-          res.redirect(app.reverse('user', { id }));
-          reject();
-        }
-        req.flash('success', 'Пользователь успешно удален');
-        res.redirect(app.reverse('users'));
-        resolve(true);
-      });
+    stmt.run(id, (err) => {
+      if (err) {
+        req.flash('warning', 'Ошибка удаления пользователя');
+        res.code(500);
+        return;
+      }
+      req.flash('success', 'Пользователь успешно удален');
+      res.redirect(app.reverse('users'));
+      return;
     });
   });
 };

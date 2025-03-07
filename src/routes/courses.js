@@ -87,18 +87,14 @@ export default (app, db) => {
     };
   
     const stmt = db.prepare('INSERT INTO courses(title, description) VALUES(?, ?)');
-    return new Promise((resolve, reject) => {
-      stmt.run([course.title, course.description], (err) => {
-        if (err) {
-          req.flash('warning', 'Ошибка создания курса');
-          res.redirect(app.reverse('newCourse'));
-          reject();
-        }
-        req.flash('success', 'Курс успешно создан');
-        res.code(201);
-        res.redirect(app.reverse('courses'));
-        resolve(true);
-      });
+    stmt.run([course.title, course.description], (err) => {
+      if (err) {
+        req.flash('warning', 'Ошибка создания курса');
+        res.code(500);
+        return;
+      }
+      req.flash('success', 'Курс успешно создан');
+      res.redirect(app.reverse('courses'));
     });
   });
 
@@ -156,16 +152,14 @@ export default (app, db) => {
     };
   
     const stmt = db.prepare('UPDATE courses SET title = ?, description = ? WHERE id = ?');
-    return new Promise(() => {
-      stmt.run([course.title, course.description, id], (err) => {
-        if (err) {
-          req.flash('warning', 'Ошибка редактирования курса');
-          res.redirect(app.reverse('course', { id }));
-          return;
-        }
-        req.flash('success', 'Курс успешно отредактирован');
-        res.redirect(app.reverse('courses'));
-      });
+    stmt.run([course.title, course.description, id], (err) => {
+      if (err) {
+        req.flash('warning', 'Ошибка редактирования курса');
+        res.code(500);
+        return;
+      }
+      req.flash('success', 'Курс успешно отредактирован');
+      res.redirect(app.reverse('courses'));
     });
   });
 
@@ -173,17 +167,14 @@ export default (app, db) => {
   app.delete('/courses/:id', (req, res) => {
     const { id } = req.params;
     const stmt = db.prepare('DELETE FROM courses WHERE id = ?');
-    return new Promise((resolve, reject) => {
-      stmt.run(id, (err) => {
-        if (err) {
-          req.flash('warning', 'Ошибка удаления курса');
-          res.redirect(app.reverse('course', { id }));
-          reject();
-        }
-        req.flash('success', 'Курс успешно удален');
-        res.redirect(app.reverse('courses'));
-        resolve(true);
-      });
+    stmt.run(id, (err) => {
+      if (err) {
+        req.flash('warning', 'Ошибка удаления курса');
+        res.code(500);
+        return;
+      }
+      req.flash('success', 'Курс успешно удален');
+      res.redirect(app.reverse('courses'));
     });
   });
 };
