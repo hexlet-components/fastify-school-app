@@ -2,7 +2,7 @@
 
 ## Requirement
 
-* NodeJS v21
+* NodeJS v24
 
 ## Commands
 

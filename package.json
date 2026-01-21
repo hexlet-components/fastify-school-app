@@ -28,5 +28,12 @@
     "sanitize-html": "^2.17.0",
     "sqlite3": "^5.1.7",
     "yup": "^1.7.1"
+  },
+  "devDependencies": {
+    "@eslint/create-config": "^1.11.0",
+    "@eslint/js": "^9.39.2",
+    "@stylistic/eslint-plugin": "^5.7.0",
+    "eslint": "^9.39.2",
+    "globals": "^17.0.0"
   }
 }
