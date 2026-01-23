@@ -1,9 +1,9 @@
-import getApp from '../src/index.js';
+import getApp from '../src/index.js'
 
-const app = await getApp();
+const app = await getApp()
 
-const port = 3000;
+const port = 3000
 
 app.listen({ port }, () => {
-  console.log(`Example app listening on port ${port}`);
-});
+  console.log(`Example app listening on port ${port}`)
+})

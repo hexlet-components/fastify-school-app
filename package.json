@@ -14,19 +14,26 @@
     "@fastify/cookie": "^11.0.2",
     "@fastify/flash": "^6.0.3",
     "@fastify/formbody": "^8.0.2",
-    "@fastify/middie": "^9.0.3",
-    "@fastify/secure-session": "^8.1.1",
-    "@fastify/session": "^11.1.0",
-    "@fastify/view": "^10.0.2",
-    "body-parser": "^1.20.3",
+    "@fastify/middie": "^9.1.0",
+    "@fastify/secure-session": "^8.3.0",
+    "@fastify/session": "^11.1.1",
+    "@fastify/view": "^11.1.1",
+    "body-parser": "^2.2.2",
     "cookie-parser": "^1.4.7",
-    "fastify": "^5.2.1",
+    "fastify": "^5.6.2",
     "fastify-method-override-wrapper": "^1.0.6",
     "fastify-reverse-routes": "^3.0.0",
-    "morgan": "^1.10.0",
+    "morgan": "^1.10.1",
     "pug": "^3.0.3",
-    "sanitize-html": "^2.14.0",
+    "sanitize-html": "^2.17.0",
     "sqlite3": "^5.1.7",
-    "yup": "^1.6.1"
+    "yup": "^1.7.1"
+  },
+  "devDependencies": {
+    "@eslint/create-config": "^1.11.0",
+    "@eslint/js": "^9.39.2",
+    "@stylistic/eslint-plugin": "^5.7.0",
+    "eslint": "^9.39.2",
+    "globals": "^17.0.0"
   }
 }
