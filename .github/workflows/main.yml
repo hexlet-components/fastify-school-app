@@ -7,15 +7,19 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [22.x, 24.x]
     
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
       
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
-          node-version: '20'
+          node-version: ${{ matrix.node-version}}
           cache: 'npm'
       
       - name: Install dependencies
@@ -26,5 +30,3 @@ jobs:
       
       - name: Run tests
         run: make test
-  
-
