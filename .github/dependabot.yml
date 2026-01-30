@@ -24,47 +24,33 @@
 #
 version: 2
 updates:
-  # 1) Dev dependencies: tools only (lint, tests, build, etc.)
+  # 1) Npm dependencies: dev and produdction
   - package-ecosystem: npm
     directory: /
     schedule:
-      interval: weekly  # Weekly check for npm devDependencies
-    allow:
-      # Only dependencies from "devDependencies" in package.json
-      - dependency-type: development
-    labels: [dependencies, automated, dev]
-    commit-message:
-      prefix: "chore"
-      include: "scope"
-    groups:
-      npm-dev-minor-patch:
-        # Group dev minor + patch updates to reduce PR noise
-        update-types: [minor, patch]
-      npm-dev-major:
-        # Keep major dev updates separate so they can be tested carefully
-        update-types: [major]
-
-  # 2) Runtime / production dependencies used by Fastify application
-  #    This includes @fastify plugins, pug, yup, sqlite3, etc.
-  - package-ecosystem: npm
-    directory: /
-    schedule:
-      interval: weekly  # Weekly check for npm runtime deps
-    allow:
-      # Only dependencies from "dependencies" in package.json
-      - dependency-type: production
-    labels: [dependencies, automated, prod]
+      interval: weekly 
+    labels: [dependencies, automated]
     commit-message:
       prefix: "chore"
       include: "scope"
     open-pull-requests-limit: 10
     groups:
-      npm-runtime-minor-patch:
-        # Group non-breaking runtime updates together (safer to merge)
-        # Examples: @fastify/view 11.1.1 → 11.2.0, pug 3.0.3 → 3.0.4
+      # Dev dependencies: minor + patch updates grouped together
+      npm-dev-minor-patch:
+        dependency-type: development
         update-types: [minor, patch]
+
+      # Dev dependencies: major updates separate for careful review
+      npm-dev-major:
+        dependency-type: development
+        update-types: [major]
+      
+       # Production dependencies: minor + patch updates 
+      npm-runtime-minor-patch:
+        dependency-type: production
+        update-types: [minor, patch]
+
+      # Production dependencies: major updates separate
       npm-runtime-major:
-        # Major runtime updates in separate PRs (may contain breaking changes)
-        # Examples: fastify 5.x.x → 6.0.0, yup 1.x.x → 2.0.0
-        # These require careful review and testing before merging
+        dependency-type: production
         update-types: [major]

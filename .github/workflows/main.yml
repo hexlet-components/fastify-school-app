@@ -1,0 +1,32 @@
+name: fastify-school-app
+
+on:
+  - push
+  - pull_request
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [22.x, 24.x]
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: ${{ matrix.node-version}}
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: make install
+      
+      - name: Run linter
+        run: make lint
+      
+      - name: Run tests
+        run: make test
