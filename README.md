@@ -1,5 +1,7 @@
 # JS Fastify Example
 
+[![main](https://github.com/hexlet-components/fastify-school-app/actions/workflows/main.yml/badge.svg)](https://github.com/hexlet-components/fastify-school-app/actions/workflows/main.yml)
+
 ## Requirement
 
 * NodeJS v24
