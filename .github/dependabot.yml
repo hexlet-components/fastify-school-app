@@ -1,56 +1,38 @@
 ---
-# Dependabot configuration
-#
-# This file configures automated dependency updates.
-# The goal is to:
-#  - keep dependencies up to date without noise
-#  - separate development and runtime (production) dependencies for safer review
-#  - reduce the number of PRs by batching minor and patch updates
-#  - highlight potentially breaking (major) updates in dedicated PRs
-#
-# Recommended documentation:
-#
-# 1) Dependabot Options Reference — full list of available keys,
-#    including "dependency-type", "groups", "update-types", etc.
-#    https://docs.github.com/en/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file
-#
-# 2) Optimizing pull request creation — best practices for grouping updates,
-#    controlling frequency, and limiting noise in development teams.
-#    https://docs.github.com/en/code-security/dependabot/dependabot-version-updates/optimizing-pr-creation-version-updates
-#
-# These links explain *why* we split dev/prod dependencies,
-# *how* grouping works, and what update strategies GitHub recommends
-# for real-world projects.
-#
 version: 2
 updates:
-  # 1) Npm dependencies: dev and produdction
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    labels: [dependencies, automated, actions]
+    groups:
+      actions-all:
+        patterns: ["*"]
+
   - package-ecosystem: npm
     directory: /
     schedule:
-      interval: weekly 
+      interval: weekly
     labels: [dependencies, automated]
     commit-message:
-      prefix: "chore"
-      include: "scope"
+      prefix: chore
+      include: scope
     open-pull-requests-limit: 10
     groups:
-      # Dev dependencies: minor + patch updates grouped together
       npm-dev-minor-patch:
         dependency-type: development
+        patterns: ["*"]
         update-types: [minor, patch]
-
-      # Dev dependencies: major updates separate for careful review
       npm-dev-major:
         dependency-type: development
+        patterns: ["*"]
         update-types: [major]
-      
-       # Production dependencies: minor + patch updates 
       npm-runtime-minor-patch:
         dependency-type: production
+        patterns: ["*"]
         update-types: [minor, patch]
-
-      # Production dependencies: major updates separate
       npm-runtime-major:
         dependency-type: production
+        patterns: ["*"]
         update-types: [major]
