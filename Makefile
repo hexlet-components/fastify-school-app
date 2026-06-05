@@ -5,12 +5,11 @@ dev:
 	node bin/index.js
 
 lint:
-	npx eslint .
+	npx biome check .
 
 lint-fix:
-	npx eslint . --fix
+	npx biome check --write .
 
 .PHONY: test
 test:
-	@echo "No tests configured yet"
-	@echo "Test step passed (placeholder)"
+	npm test
