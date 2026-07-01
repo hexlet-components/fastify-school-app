@@ -19,23 +19,23 @@
     "@fastify/cookie": "^11.0.2",
     "@fastify/flash": "^6.0.3",
     "@fastify/formbody": "^8.0.2",
-    "@fastify/middie": "^9.3.2",
+    "@fastify/middie": "^9.3.3",
     "@fastify/secure-session": "^8.3.0",
     "@fastify/session": "^11.1.1",
-    "@fastify/view": "^11.1.1",
-    "body-parser": "^2.2.2",
+    "@fastify/view": "^12.0.0",
+    "body-parser": "^2.3.0",
     "cookie-parser": "^1.4.7",
-    "fastify": "^5.8.5",
+    "fastify": "^5.9.0",
     "fastify-method-override-wrapper": "^1.0.6",
     "fastify-reverse-routes": "^3.0.0",
-    "morgan": "^1.10.1",
+    "morgan": "^1.11.0",
     "pug": "^3.0.4",
-    "sanitize-html": "^2.17.4",
+    "sanitize-html": "^2.17.5",
     "sqlite3": "^6.0.1",
     "yup": "^1.7.1"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.2.4",
-    "vitest": "^4.0.15"
+    "@biomejs/biome": "^2.5.1",
+    "vitest": "^4.1.9"
   }
 }
