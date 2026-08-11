@@ -1,4 +1,4 @@
-import getApp from '../src/index.js';
+import getApp from "../src/index.js";
 
 const app = await getApp();
 
