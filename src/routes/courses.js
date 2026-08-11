@@ -1,6 +1,6 @@
 // @ts-check
 
-import yup from 'yup';
+import * as yup from 'yup';
 
 /**
  * @param {any} app - Экземпляр Fastify
