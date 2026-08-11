@@ -7,10 +7,10 @@
 
 export default (app) => {
   // Главная страница
-  app.get('/', (/** @type {any} */ _req, /** @type {any} */ res) => {
+  app.get("/", (/** @type {any} */ _req, /** @type {any} */ res) => {
     const templateData = {
       flash: res.flash(),
     };
-    res.view('index', templateData);
+    res.view("index", templateData);
   });
 };

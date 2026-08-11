@@ -1,15 +1,16 @@
 install:
-	npm ci
+	pnpm install --frozen-lockfile
 
 dev:
 	node bin/index.js
 
 lint:
-	npx biome check .
+	pnpm --silent run lint
+	pnpm --silent run format:check
 
 lint-fix:
-	npx biome check --write .
+	pnpm --silent run lint:fix
 
 .PHONY: test
 test:
-	npm test
+	pnpm test

@@ -1,8 +1,8 @@
 // @ts-check
 
-import courses from './courses.js';
-import root from './root.js';
-import users from './users.js';
+import courses from "./courses.js";
+import root from "./root.js";
+import users from "./users.js";
 
 const controllers = [courses, users, root];
 

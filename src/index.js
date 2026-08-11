@@ -1,19 +1,19 @@
 // @ts-check
 
-import path from 'node:path';
-import { fileURLToPath } from 'node:url';
-import fastifyCookie from '@fastify/cookie';
-import flash from '@fastify/flash';
-import formbody from '@fastify/formbody';
-import fastifySession from '@fastify/secure-session';
-import view from '@fastify/view';
-import fastify from 'fastify';
-import wrapFastify from 'fastify-method-override-wrapper';
-import { plugin as fastifyReverseRoutes } from 'fastify-reverse-routes';
-import pug from 'pug';
-import sqlite3 from 'sqlite3';
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+import fastifyCookie from "@fastify/cookie";
+import flash from "@fastify/flash";
+import formbody from "@fastify/formbody";
+import fastifySession from "@fastify/secure-session";
+import view from "@fastify/view";
+import fastify from "fastify";
+import wrapFastify from "fastify-method-override-wrapper";
+import { plugin as fastifyReverseRoutes } from "fastify-reverse-routes";
+import pug from "pug";
+import sqlite3 from "sqlite3";
 
-import addRoutes from './routes/index.js';
+import addRoutes from "./routes/index.js";
 
 export default async () => {
   const __dirname = fileURLToPath(path.dirname(import.meta.url));
@@ -25,7 +25,7 @@ export default async () => {
     exposeHeadRoutes: false,
   });
 
-  const db = new sqlite3.Database(':memory:');
+  const db = new sqlite3.Database(":memory:");
 
   const prepareDatabase = () => {
     db.serialize(() => {
@@ -49,24 +49,22 @@ export default async () => {
     const courses = [
       {
         id: 1,
-        title: 'JavaScript',
-        description: 'Курс по языку программирования JavaScript',
+        title: "JavaScript",
+        description: "Курс по языку программирования JavaScript",
       },
-      { id: 2, title: 'Fastify', description: 'Курс по фреймворку Fastify' },
+      { id: 2, title: "Fastify", description: "Курс по фреймворку Fastify" },
     ];
 
-    const users = [
-      { id: 1, name: 'admin', email: 'admin@example.com', password: 'admin' },
-    ];
+    const users = [{ id: 1, name: "admin", email: "admin@example.com", password: "admin" }];
 
-    const stmtCourses = db.prepare('INSERT INTO courses VALUES (?, ?, ?)');
+    const stmtCourses = db.prepare("INSERT INTO courses VALUES (?, ?, ?)");
 
     courses.forEach((course) => {
       stmtCourses.run(course.id, course.title, course.description);
     });
     stmtCourses.finalize();
 
-    const stmtUsers = db.prepare('INSERT INTO users VALUES (?, ?, ?, ?)');
+    const stmtUsers = db.prepare("INSERT INTO users VALUES (?, ?, ?, ?)");
 
     users.forEach((user) => {
       stmtUsers.run(user.id, user.name, user.email, user.password);
@@ -83,7 +81,7 @@ export default async () => {
     engine: {
       pug,
     },
-    templates: path.join(__dirname, 'views'),
+    templates: path.join(__dirname, "views"),
     defaultContext: {
       /** @type {(name: string, placeholdersValues?: any) => string} */
       route(name, placeholdersValues) {
@@ -93,7 +91,7 @@ export default async () => {
   });
   await app.register(fastifyCookie);
   await app.register(fastifySession, {
-    secret: 'a secret with minimum length of 32 characters',
+    secret: "a secret with minimum length of 32 characters",
   });
 
   await app.register(flash);
