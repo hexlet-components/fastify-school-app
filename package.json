@@ -5,9 +5,12 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "lint": "biome check .",
+    "lint": "oxlint --config=.oxlintrc.json .",
     "lint-fix": "biome check --write .",
-    "test": "vitest run --passWithNoTests"
+    "test": "vitest run --passWithNoTests",
+    "lint:fix": "oxfmt --ignore-path=.oxfmtignore . && oxlint --config=.oxlintrc.json --fix .",
+    "format": "oxfmt --ignore-path=.oxfmtignore .",
+    "format:check": "oxfmt --ignore-path=.oxfmtignore --check ."
   },
   "keywords": [],
   "author": "",
@@ -35,7 +38,9 @@
     "yup": "^1.7.1"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.5.6",
+    "oxfmt": "^0.63.0",
+    "oxlint": "^1.78.0",
     "vitest": "^4.1.10"
-  }
+  },
+  "packageManager": "pnpm@11.20.0"
 }
