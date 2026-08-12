@@ -2,6 +2,13 @@
 
 [![main](https://github.com/hexlet-components/fastify-school-app/actions/workflows/main.yml/badge.svg)](https://github.com/hexlet-components/fastify-school-app/actions/workflows/main.yml)
 
+## Зачем это нужно
+
+Учебное приложение на [Fastify](https://fastify.dev/): курсы, уроки и запись
+студентов. Сделано как самостоятельная работа курса по Fastify, поэтому
+показывает не библиотеку по отдельности, а собранный из них проект: маршруты,
+шаблоны, валидация формы, работа с базой.
+
 ## Requirement
 
 * NodeJS v24
