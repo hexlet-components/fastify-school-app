@@ -1,11 +1,6 @@
 // @ts-check
 
-/**
- *
- * @param {any} app - Экземпляр Fastify
- */
-
-export default (app) => {
+export default async (app, _opts) => {
   // Главная страница
   app.get("/", (/** @type {any} */ _req, /** @type {any} */ res) => {
     const templateData = {

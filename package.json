@@ -2,9 +2,11 @@
   "name": "fastify-test",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "app.js",
   "type": "module",
   "scripts": {
+    "start": "fastify start -o -l info app.js",
+    "dev": "fastify start -w -o -l info -P app.js",
     "lint": "oxlint --config=.oxlintrc.json .",
     "lint-fix": "biome check --write .",
     "test": "vitest run --passWithNoTests",
@@ -19,6 +21,7 @@
     "node": ">=26.0"
   },
   "dependencies": {
+    "@fastify/autoload": "^6.0.0",
     "@fastify/cookie": "^11.1.2",
     "@fastify/flash": "^6.0.3",
     "@fastify/formbody": "^8.0.2",
@@ -26,10 +29,9 @@
     "@fastify/secure-session": "^8.3.0",
     "@fastify/session": "^11.1.2",
     "@fastify/view": "^12.0.0",
-    "body-parser": "^2.3.0",
-    "cookie-parser": "^1.4.7",
     "fastify": "^5.10.0",
-    "fastify-method-override-wrapper": "^1.0.6",
+    "fastify-cli": "^8.0.0",
+    "fastify-plugin": "^5.0.0",
     "fastify-reverse-routes": "^3.0.0",
     "morgan": "^1.11.0",
     "pug": "^3.0.4",

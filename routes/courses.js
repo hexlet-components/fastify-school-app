@@ -2,21 +2,18 @@
 
 import * as yup from "yup";
 
-/**
- * @param {any} app - Экземпляр Fastify
- * @param {any} db - База данных SQLite
- */
-
-export default (app, db) => {
+export default async (app, _opts) => {
+  const db = app.db;
   // Просмотр списка курсов
   app.get("/courses", { name: "courses" }, (/** @type {any} */ req, /** @type {any} */ res) => {
     const filterOptions = req.query;
 
     const query = filterOptions.title
-      ? `SELECT * FROM courses WHERE title LIKE "%${filterOptions.title}%"`
+      ? "SELECT * FROM courses WHERE title LIKE ?"
       : "SELECT * FROM courses";
+    const params = filterOptions.title ? [`%${filterOptions.title}%`] : [];
 
-    db.all(query, (/** @type {any} */ error, /** @type {any} */ data) => {
+    db.all(query, params, (/** @type {any} */ error, /** @type {any} */ data) => {
       if (error) {
         console.error(error);
         req.flash("warning", "Ошибка получения списка курсов");
@@ -42,7 +39,8 @@ export default (app, db) => {
   app.get("/courses/:id", { name: "course" }, (/** @type {any} */ req, /** @type {any} */ res) => {
     const { id } = req.params;
     db.get(
-      `SELECT * FROM courses WHERE id = ${id}`,
+      "SELECT * FROM courses WHERE id = ?",
+      id,
       (/** @type {any} */ error, /** @type {any} */ data) => {
         if (error) {
           req.flash("warning", "Ошибка запроса к базе данных");
@@ -51,14 +49,13 @@ export default (app, db) => {
         }
         if (!data) {
           req.flash("warning", "Курс не найден");
-          res.code(404);
+          res.code(404).send("Not found");
           return;
         }
         const templateData = {
           course: data,
           flash: res.flash(),
         };
-        console.log("templateData: ", templateData);
         res.view("courses/show", templateData);
       },
     );
@@ -126,7 +123,8 @@ export default (app, db) => {
     (/** @type {any} */ req, /** @type {any} */ res) => {
       const { id } = req.params;
       db.get(
-        `SELECT * FROM courses WHERE id = ${id}`,
+        "SELECT * FROM courses WHERE id = ?",
+        id,
         (/** @type {any} */ error, /** @type {any} */ data) => {
           if (error) {
             req.flash("warning", "Курс не найден");

@@ -2,12 +2,8 @@
 
 import * as yup from "yup";
 
-/**
- * @param {any} app - Экземпляр Fastify
- * @param {any} db - База данных SQLite
- */
-
-export default (app, db) => {
+export default async (app, _opts) => {
+  const db = app.db;
   // Просмотр списка пользователей
 
   app.get("/users", { name: "users" }, (/** @type {any} */ req, /** @type {any} */ res) => {
@@ -29,7 +25,8 @@ export default (app, db) => {
   app.get("/users/:id", { name: "user" }, (/** @type {any} */ req, /** @type {any} */ res) => {
     const { id } = req.params;
     db.get(
-      `SELECT * FROM users WHERE id = ${id}`,
+      "SELECT * FROM users WHERE id = ?",
+      id,
       (/** @type {any} */ error, /** @type {any} */ data) => {
         if (error) {
           req.flash("warning", "Ошибка");
@@ -39,7 +36,7 @@ export default (app, db) => {
         }
         if (!data) {
           req.flash("warning", "Пользователь не найден");
-          res.code(404);
+          res.code(404).send("Not found");
           return;
         }
         const templateData = {
@@ -131,7 +128,8 @@ export default (app, db) => {
     (/** @type {any} */ req, /** @type {any} */ res) => {
       const { id } = req.params;
       db.get(
-        `SELECT * FROM users WHERE id = ${id}`,
+        "SELECT * FROM users WHERE id = ?",
+        id,
         (/** @type {any} */ error, /** @type {any} */ data) => {
           if (error) {
             req.flash("warning", "Ошибка");
@@ -140,7 +138,7 @@ export default (app, db) => {
           }
           if (!data) {
             req.flash("warning", "Пользователь не найден");
-            res.code(404);
+            res.code(404).send("Not found");
             return;
           }
           const templateData = {

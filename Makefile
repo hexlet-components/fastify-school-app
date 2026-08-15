@@ -2,7 +2,10 @@ install:
 	pnpm install --frozen-lockfile
 
 dev:
-	node bin/index.js
+	pnpm run dev
+
+start:
+	pnpm start
 
 lint:
 	pnpm --silent run lint
