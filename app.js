@@ -28,8 +28,6 @@ const rewriteUrl = (/** @type {any} */ req) => {
 // в командах start и dev.
 export const options = {
   logger: true,
-  // fastify-reverse-routes даёт паре GET и HEAD одно имя и падает на дубле
-  exposeHeadRoutes: false,
   rewriteUrl,
 };
 
