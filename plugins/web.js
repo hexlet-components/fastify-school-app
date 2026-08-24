@@ -4,6 +4,7 @@ import fastifyCookie from "@fastify/cookie";
 import flash from "@fastify/flash";
 import formbody from "@fastify/formbody";
 import fastifySession from "@fastify/secure-session";
+import fastifyStatic from "@fastify/static";
 import view from "@fastify/view";
 import fp from "fastify-plugin";
 import pug from "pug";
@@ -16,12 +17,22 @@ const __dirname = path.dirname(__filename);
 export default fp(async (fastify) => {
   await fastify.register(formbody);
 
+  // Собранный css лежит в dist: его пишет vite, поэтому каталог раздаётся
+  // статикой, а не входит в исходники.
+  await fastify.register(fastifyStatic, {
+    root: path.join(__dirname, "..", "dist"),
+    prefix: "/assets/",
+  });
+
   await fastify.register(view, {
     engine: { pug },
     templates: path.join(__dirname, "..", "views"),
     defaultContext: {
       route(name, placeholdersValues) {
         return fastify.reverse(name, placeholdersValues);
+      },
+      assetPath(filename) {
+        return `/assets/${filename}`;
       },
     },
   });

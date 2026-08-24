@@ -5,6 +5,7 @@
   "main": "app.js",
   "type": "module",
   "scripts": {
+    "build": "vite build",
     "start": "fastify start -o -l info app.js",
     "dev": "fastify start -w -o -l info -P app.js",
     "lint": "oxlint --config=.oxlintrc.json .",
@@ -25,6 +26,7 @@
     "@fastify/flash": "^6.0.3",
     "@fastify/formbody": "^9.0.0",
     "@fastify/secure-session": "^8.3.0",
+    "@fastify/static": "^10.1.3",
     "@fastify/view": "^12.0.0",
     "fastify": "^5.10.0",
     "fastify-cli": "^8.0.0",
@@ -33,8 +35,11 @@
     "yup": "^1.7.1"
   },
   "devDependencies": {
+    "@tailwindcss/vite": "^4.3.3",
     "oxfmt": "^0.63.0",
     "oxlint": "^1.78.0",
+    "tailwindcss": "^4.3.3",
+    "vite": "^8.2.2",
     "vitest": "^4.1.10"
   },
   "packageManager": "pnpm@11.20.0"

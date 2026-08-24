@@ -1,5 +1,10 @@
+setup: install build
+
 install:
 	pnpm install --frozen-lockfile
+
+build:
+	pnpm run build
 
 dev:
 	pnpm run dev
