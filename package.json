@@ -8,7 +8,7 @@
     "start": "fastify start -o -l info app.js",
     "dev": "fastify start -w -o -l info -P app.js",
     "lint": "oxlint --config=.oxlintrc.json .",
-    "test": "vitest run --passWithNoTests",
+    "test": "vitest run",
     "lint:fix": "oxfmt --ignore-path=.oxfmtignore . && oxlint --config=.oxlintrc.json --fix .",
     "format": "oxfmt --ignore-path=.oxfmtignore .",
     "format:check": "oxfmt --ignore-path=.oxfmtignore --check ."
