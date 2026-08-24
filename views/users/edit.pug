@@ -13,14 +13,14 @@ block content
 
               .form-floating.mb-3
                 input.form-control(id= "email" name= "email" value= user.email)
-                label(for= "title") Емейл
+                label(for= "email") Емейл
 
               .form-floating.mb-3
-                input.form-control(id= "password" name= "password" value= user.password)
+                input.form-control(id= "password" name= "password")
                 label(for= "password") Пароль
 
               .form-floating.mb-3
-                input.form-control(id= "passwordConfirmation" name= "passwordConfirmation" value= user.passwordConfirmation)
+                input.form-control(id= "passwordConfirmation" name= "passwordConfirmation")
                 label(for= "passwordConfirmation") Подтверждение пароля
 
               input(class='btn btn-primary' type='submit' value= 'Сохранить')

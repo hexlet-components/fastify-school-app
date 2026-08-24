@@ -8,12 +8,12 @@ block content
           .col-12.col-md-6.mt-3.mt-mb-0
             form(action=route('users') method='post')
               .form-floating.mb-3
-                input.form-control(id= "name" name= "name")
+                input.form-control(id= "name" name= "name" value= name)
                 label(for= "name") Имя
 
               .form-floating.mb-3
-                input.form-control(id= "email" name= "email")
-                label(for= "title") Емейл
+                input.form-control(id= "email" name= "email" value= email)
+                label(for= "email") Емейл
 
               .form-floating.mb-3
                 input.form-control(id= "password" name= "password")

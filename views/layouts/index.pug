@@ -19,17 +19,17 @@ html(lang="ru")
 
     .container.wrapper.flex-grow-1
       if flash && flash.warning
-        for message in flash
+        for message in flash.warning
           .alert(class='alert-warning')
             = message
 
       if flash && flash.success
-        for message in flash
+        for message in flash.success
           .alert(class='alert-success')
             = message
 
       if flash && flash.info
-        for message in flash
+        for message in flash.info
           .alert(class='alert-info')
             = message
 

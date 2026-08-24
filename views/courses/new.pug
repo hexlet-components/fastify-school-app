@@ -8,11 +8,11 @@ block content
           .col-12.col-md-6.mt-3.mt-mb-0
             form(action=route('courses') method='post')
               .form-floating.mb-3
-                input.form-control(id= "title" name= "title")
+                input.form-control(id= "title" name= "title" value= title)
                 label(for= "title") Название
 
               .mb-3
                 label(for= "description") Описание
-                textarea.form-control(id= "description" name= "description")
+                textarea.form-control(id= "description" name= "description")= description
 
               input(class='btn btn-primary' type='submit' value= 'Создать')
