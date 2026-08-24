@@ -1,6 +1,6 @@
 # JS Fastify Example
 
-[![main](https://github.com/hexlet-components/fastify-school-app/actions/workflows/main.yml/badge.svg)](https://github.com/hexlet-components/fastify-school-app/actions/workflows/main.yml)
+[![Node CI](https://github.com/hexlet-components/fastify-school-app/actions/workflows/nodeci.yml/badge.svg)](https://github.com/hexlet-components/fastify-school-app/actions/workflows/nodeci.yml)
 
 ## Зачем это нужно
 
@@ -11,7 +11,7 @@
 
 ## Requirement
 
-* NodeJS v24
+- NodeJS v26
 
 ## Структура
 
@@ -22,11 +22,15 @@ app.js        точка входа: подключает plugins и routes че
 plugins/      расширения приложения: база данных, шаблонизатор, сессия, флеш
 routes/       обработчики запросов, по файлу на сущность
 views/        шаблоны pug
+test/         тесты, приложение поднимается через fastify-cli/helper
 ```
+
+База данных живёт в памяти процесса и работает через встроенный в NodeJS модуль
+`node:sqlite`, поэтому внешнего драйвера у проекта нет.
 
 Сервер поднимает `fastify start`, поэтому в коде приложения нет ни создания
 объекта Fastify, ни вызова `listen()`. Опции приложения (логгер, отключение
-авто-HEAD, подмена метода формы) лежат в экспорте `options` файла *app.js* и
+авто-HEAD, подмена метода формы) лежат в экспорте `options` файла _app.js_ и
 применяются флагом `--options`, который прописан в командах запуска.
 
 ## Commands
@@ -34,12 +38,14 @@ views/        шаблоны pug
 ```bash
 make install
 make dev
+make test
+make lint
 ```
 
 ---
 
-[![Hexlet Ltd. logo](https://raw.githubusercontent.com/Hexlet/assets/master/images/hexlet_logo128.png)](https://hexlet.io?utm_source=github&utm_medium=link&utm_campaign=js-fastify-blog)
+[![Hexlet Ltd. logo](https://raw.githubusercontent.com/Hexlet/assets/master/images/hexlet_logo128.png)](https://hexlet.io?utm_source=github&utm_medium=link&utm_campaign=fastify-school-app)
 
-This repository is created and maintained by the team and the community of Hexlet, an educational project. [Read more about Hexlet](https://hexlet.io?utm_source=github&utm_medium=link&utm_campaign=js-fastify-blog).
+This repository is created and maintained by the team and the community of Hexlet, an educational project. [Read more about Hexlet](https://hexlet.io?utm_source=github&utm_medium=link&utm_campaign=fastify-school-app).
 
 See most active contributors on [hexlet-friends](https://friends.hexlet.io/).
