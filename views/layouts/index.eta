@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="<%= it.assetPath('main.css') %>" rel="stylesheet">
+  </head>
+  <body class="flex min-h-screen flex-col bg-gray-50 text-gray-900">
+    <nav class="border-b border-gray-200 bg-white">
+      <div class="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-4 px-4 py-3">
+        <a class="text-lg font-semibold" href="/">Главная</a>
+        <div class="flex gap-4">
+          <a class="text-sm text-gray-600 hover:text-gray-900" href="<%= it.route('users') %>">Пользователи</a>
+          <a class="text-sm text-gray-600 hover:text-gray-900" href="<%= it.route('courses') %>">Курсы</a>
+        </div>
+      </div>
+    </nav>
+
+    <div class="mx-auto w-full max-w-5xl flex-1 px-4 pb-10">
+      <% if (it.flash && it.flash.warning) { %>
+        <% it.flash.warning.forEach((message) => { %>
+        <div class="mt-4 rounded border border-amber-200 bg-amber-50 px-4 py-3 text-amber-800"><%= message %></div>
+        <% }) %>
+      <% } %>
+
+      <% if (it.flash && it.flash.success) { %>
+        <% it.flash.success.forEach((message) => { %>
+        <div class="mt-4 rounded border border-green-200 bg-green-50 px-4 py-3 text-green-800"><%= message %></div>
+        <% }) %>
+      <% } %>
+
+      <% if (it.flash && it.flash.info) { %>
+        <% it.flash.info.forEach((message) => { %>
+        <div class="mt-4 rounded border border-sky-200 bg-sky-50 px-4 py-3 text-sky-800"><%= message %></div>
+        <% }) %>
+      <% } %>
+
+      <h1 class="mt-6 mb-4 text-3xl font-bold"><%= it.header ?? '' %></h1>
+      <%~ it.body %>
+    </div>
+
+    <footer class="bg-gray-800 text-gray-100">
+      <div class="mx-auto max-w-5xl px-4 py-4">
+        <p class="mb-0">&copy; Hexlet Ltd, 2024</p>
+      </div>
+    </footer>
+  </body>
+</html>

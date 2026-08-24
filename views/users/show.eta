@@ -1,0 +1,19 @@
+<% layout("../layouts/index", { header: it.user.name }) %>
+<div class="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+  <dl>
+    <div class="mb-3 flex flex-wrap gap-2">
+      <dt class="text-gray-500">Имя</dt>
+      <dd><%= it.user.name %></dd>
+    </div>
+    <div class="mb-4 flex flex-wrap gap-2">
+      <dt class="text-gray-500">Емейл</dt>
+      <dd><%= it.user.email %></dd>
+    </div>
+  </dl>
+  <div class="flex flex-wrap items-center gap-2">
+    <a class="rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700" href="<%= it.route('editUser', { id: it.user.id }) %>">Редактировать</a>
+    <form action="<%= it.route('user', { id: it.user.id }) %>?_method=DELETE" method="post">
+      <input class="cursor-pointer rounded bg-red-600 px-4 py-2 text-white hover:bg-red-700" type="submit" value="Удалить">
+    </form>
+  </div>
+</div>

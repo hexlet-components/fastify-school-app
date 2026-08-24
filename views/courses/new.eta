@@ -1,0 +1,16 @@
+<% layout("../layouts/index", { header: "Новый курс" }) %>
+<div class="mx-auto max-w-xl rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+  <form action="<%= it.route('courses') %>" method="post">
+    <div class="mb-4">
+      <label class="mb-1 block text-sm font-medium" for="title">Название</label>
+      <input class="w-full rounded border border-gray-300 px-3 py-2" id="title" name="title" value="<%= it.title ?? '' %>">
+    </div>
+
+    <div class="mb-4">
+      <label class="mb-1 block text-sm font-medium" for="description">Описание</label>
+      <textarea class="w-full rounded border border-gray-300 px-3 py-2" id="description" name="description" rows="4"><%= it.description ?? '' %></textarea>
+    </div>
+
+    <input class="cursor-pointer rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700" type="submit" value="Создать">
+  </form>
+</div>

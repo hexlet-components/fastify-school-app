@@ -1,0 +1,32 @@
+<% layout("../layouts/index", { header: "Список пользователей" }) %>
+<a class="inline-block rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700" href="<%= it.route('newUser') %>">Новый пользователь</a>
+
+<div class="mt-8 overflow-x-auto">
+  <table class="w-full border-collapse bg-white text-left">
+    <thead>
+      <tr class="border-b border-gray-200">
+        <th class="px-4 py-2 font-semibold">Идентификатор</th>
+        <th class="px-4 py-2 font-semibold">Имя</th>
+        <th class="px-4 py-2 font-semibold">Емейл</th>
+        <th class="px-4 py-2 font-semibold">Действия</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% it.users.forEach((user) => { %>
+      <tr class="border-b border-gray-100 odd:bg-gray-50">
+        <td class="px-4 py-2"><%= user.id %></td>
+        <td class="px-4 py-2"><%= user.name %></td>
+        <td class="px-4 py-2"><%= user.email %></td>
+        <td class="px-4 py-2">
+          <div class="flex flex-wrap items-center gap-2">
+            <a class="rounded bg-blue-600 px-3 py-1 text-sm text-white hover:bg-blue-700" href="<%= it.route('editUser', { id: user.id }) %>">Редактировать</a>
+            <form action="<%= it.route('user', { id: user.id }) %>?_method=DELETE" method="post">
+              <input class="cursor-pointer rounded bg-red-600 px-3 py-1 text-sm text-white hover:bg-red-700" type="submit" value="Удалить">
+            </form>
+          </div>
+        </td>
+      </tr>
+      <% }) %>
+    </tbody>
+  </table>
+</div>

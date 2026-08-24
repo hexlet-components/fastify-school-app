@@ -1,0 +1,44 @@
+<% layout("../layouts/index", { header: "Список курсов" }) %>
+<a class="inline-block rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700" href="<%= it.route('newCourse') %>">Новый курс</a>
+
+<div class="mt-6 rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+  <form action="<%= it.route('courses') %>" method="get">
+    <div class="flex flex-wrap items-end gap-4">
+      <div class="flex-1">
+        <label class="mb-1 block text-sm font-medium" for="filterTitle">Название курса</label>
+        <input class="w-full rounded border border-gray-300 px-3 py-2" id="filterTitle" name="title">
+      </div>
+      <input class="cursor-pointer rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700" type="submit" value="Поиск">
+    </div>
+  </form>
+</div>
+
+<div class="mt-8 overflow-x-auto">
+  <table class="w-full border-collapse bg-white text-left">
+    <thead>
+      <tr class="border-b border-gray-200">
+        <th class="px-4 py-2 font-semibold">Идентификатор</th>
+        <th class="px-4 py-2 font-semibold">Название</th>
+        <th class="px-4 py-2 font-semibold">Действия</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% it.courses.forEach((course) => { %>
+      <tr class="border-b border-gray-100 odd:bg-gray-50">
+        <td class="px-4 py-2"><%= course.id %></td>
+        <td class="px-4 py-2">
+          <a class="text-blue-600 hover:underline" href="<%= it.route('course', { id: course.id }) %>"><%= course.title %></a>
+        </td>
+        <td class="px-4 py-2">
+          <div class="flex flex-wrap items-center gap-2">
+            <a class="rounded bg-blue-600 px-3 py-1 text-sm text-white hover:bg-blue-700" href="<%= it.route('editCourse', { id: course.id }) %>">Редактировать</a>
+            <form action="<%= it.route('course', { id: course.id }) %>?_method=DELETE" method="post">
+              <input class="cursor-pointer rounded bg-red-600 px-3 py-1 text-sm text-white hover:bg-red-700" type="submit" value="Удалить">
+            </form>
+          </div>
+        </td>
+      </tr>
+      <% }) %>
+    </tbody>
+  </table>
+</div>
