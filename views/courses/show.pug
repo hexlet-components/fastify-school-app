@@ -1,15 +1,18 @@
 extends ../layouts/index.pug
 
+block header
+  = course.title
+
 block content
-  div.row.mt-5.p-5.shadow.bg-white
-    div.col-12.col-md-4.px-3.order-1.order-md-2.mb-3.mb-md-0
-      div.d-flex.flex-wrap.mb-3
-        span.text-muted.me-2 Название
-        span= course.title
-      div.d-flex.flex-wrap.mb-3
-        span.text-muted.me-2 Описание
-        span= course.description
-      div.d-flex.flex-wrap
-        a.btn.btn-primary.me-1(href=route('editCourse', { id: course.id })) Редактировать
-        form(action=`${route('course', { id: course.id })}?_method=DELETE`, method="post")
-          input(type='submit', value="Удалить", class="btn btn-danger")
+  .rounded-lg.border.border-gray-200.bg-white.p-6.shadow-sm
+    dl
+      .mb-3.flex.flex-wrap.gap-2
+        dt.text-gray-500 Название
+        dd= course.title
+      .mb-4.flex.flex-wrap.gap-2
+        dt.text-gray-500 Описание
+        dd= course.description
+    .flex.flex-wrap.items-center.gap-2
+      a(class="rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700" href=route('editCourse', { id: course.id })) Редактировать
+      form(action=`${route('course', { id: course.id })}?_method=DELETE`, method="post")
+        input(class="cursor-pointer rounded bg-red-600 px-4 py-2 text-white hover:bg-red-700" type='submit', value="Удалить")

@@ -13,6 +13,19 @@ const form = (payload) => ({
   payload: new URLSearchParams(payload).toString(),
 });
 
+// Сборка стилей проверяется прогоном: её отказ выглядит как успех, потому что
+// `main.css` оказывается на месте, а классов из шаблонов в нём нет, и страница
+// приходит без оформления.
+describe("assets", () => {
+  it("отдаёт собранный css с классами из шаблонов", async () => {
+    const res = await app.inject({ method: "GET", url: "/assets/main.css" });
+
+    expect(res.statusCode).toBe(200);
+    expect(res.payload).toContain(".max-w-5xl");
+    expect(res.payload).toContain(".bg-green-50");
+  });
+});
+
 describe("courses", () => {
   it("отдаёт список", async () => {
     const res = await app.inject({ method: "GET", url: "/courses" });

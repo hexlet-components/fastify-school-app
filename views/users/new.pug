@@ -1,26 +1,25 @@
 extends ../layouts/index.pug
 
+block header
+  = "Новый пользователь"
+
 block content
-  .row.justify-content-center
-    .col-12.col-md-8
-      .card.shadow-sm
-        .card-body.row.p-5
-          .col-12.col-md-6.mt-3.mt-mb-0
-            form(action=route('users') method='post')
-              .form-floating.mb-3
-                input.form-control(id= "name" name= "name" value= name)
-                label(for= "name") Имя
+  .mx-auto.max-w-xl.rounded-lg.border.border-gray-200.bg-white.p-6.shadow-sm
+    form(action=route('users') method='post')
+      .mb-4
+        label.mb-1.block.text-sm.font-medium(for="name") Имя
+        input(class="w-full rounded border border-gray-300 px-3 py-2" id="name" name="name" value=name)
 
-              .form-floating.mb-3
-                input.form-control(id= "email" name= "email" value= email)
-                label(for= "email") Емейл
+      .mb-4
+        label.mb-1.block.text-sm.font-medium(for="email") Емейл
+        input(class="w-full rounded border border-gray-300 px-3 py-2" id="email" name="email" value=email)
 
-              .form-floating.mb-3
-                input.form-control(id= "password" name= "password")
-                label(for= "password") Пароль
+      .mb-4
+        label.mb-1.block.text-sm.font-medium(for="password") Пароль
+        input(class="w-full rounded border border-gray-300 px-3 py-2" id="password" name="password" type="password")
 
-              .form-floating.mb-3
-                input.form-control(id= "passwordConfirmation" name= "passwordConfirmation")
-                label(for= "passwordConfirmation") Подтверждение пароля
+      .mb-4
+        label.mb-1.block.text-sm.font-medium(for="passwordConfirmation") Подтверждение пароля
+        input(class="w-full rounded border border-gray-300 px-3 py-2" id="passwordConfirmation" name="passwordConfirmation" type="password")
 
-              input(class='btn btn-primary' type='submit' value= 'Создать')
+      input(class="cursor-pointer rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700" type='submit' value='Создать')
