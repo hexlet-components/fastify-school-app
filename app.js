@@ -1,5 +1,3 @@
-// @ts-check
-
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import AutoLoad from "@fastify/autoload";
@@ -12,7 +10,7 @@ const __dirname = path.dirname(__filename);
 // маршрутизации: обработчики объявлены на настоящие глаголы HTTP.
 const allowedMethods = ["HEAD", "PUT", "DELETE", "OPTIONS", "PATCH"];
 
-const rewriteUrl = (/** @type {any} */ req) => {
+const rewriteUrl = (req) => {
   if (req.method.toUpperCase() === "POST") {
     const { searchParams } = new URL(req.url, "http://localhost");
     const method = searchParams.get("_method")?.toUpperCase();

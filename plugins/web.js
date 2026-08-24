@@ -1,5 +1,3 @@
-// @ts-check
-
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import fastifyCookie from "@fastify/cookie";
@@ -22,11 +20,21 @@ export default fp(async (fastify) => {
     engine: { pug },
     templates: path.join(__dirname, "..", "views"),
     defaultContext: {
-      /** @type {(name: string, placeholdersValues?: any) => string} */
       route(name, placeholdersValues) {
         return fastify.reverse(name, placeholdersValues);
       },
     },
+  });
+
+  // Схемы маршрутов описаны на yup, а fastify по умолчанию ждёт JSON Schema.
+  // Компилятор объявлен один раз на всё приложение, поэтому маршрут указывает
+  // только саму схему.
+  fastify.setValidatorCompiler(({ schema }) => (data) => {
+    try {
+      return { value: schema.validateSync(data) };
+    } catch (error) {
+      return { error };
+    }
   });
 
   await fastify.register(fastifyCookie);

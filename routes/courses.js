@@ -1,214 +1,94 @@
-// @ts-check
-
 import * as yup from "yup";
 
+const courseSchema = {
+  body: yup.object({
+    title: yup.string().min(2),
+  }),
+};
+
 export default async (app, _opts) => {
-  const db = app.db;
+  const { db } = app;
+
   // Просмотр списка курсов
-  app.get("/courses", { name: "courses" }, (/** @type {any} */ req, /** @type {any} */ res) => {
-    const filterOptions = req.query;
+  app.get("/courses", { name: "courses" }, (req, res) => {
+    const { title } = req.query;
 
-    const query = filterOptions.title
-      ? "SELECT * FROM courses WHERE title LIKE ?"
-      : "SELECT * FROM courses";
-    const params = filterOptions.title ? [`%${filterOptions.title}%`] : [];
+    const courses = title
+      ? db.prepare("SELECT * FROM courses WHERE title LIKE ?").all(`%${title}%`)
+      : db.prepare("SELECT * FROM courses").all();
 
-    db.all(query, params, (/** @type {any} */ error, /** @type {any} */ data) => {
-      if (error) {
-        console.error(error);
-        req.flash("warning", "Ошибка получения списка курсов");
-        res.redirect(app.reverse("courses"));
-        return;
-      }
-      const templateData = {
-        courses: data,
-        flash: res.flash(),
-      };
-      res.view("courses/index.pug", templateData);
-    });
+    res.view("courses/index", { courses, flash: res.flash() });
   });
 
   // Форма создания нового курса
-  app.get(
-    "/courses/new",
-    { name: "newCourse" },
-    (/** @type {any} */ _req, /** @type {any} */ res) => res.view("courses/new.pug"),
-  );
+  app.get("/courses/new", { name: "newCourse" }, (_req, res) => res.view("courses/new"));
 
   // Просмотр конкретного курса
-  app.get("/courses/:id", { name: "course" }, (/** @type {any} */ req, /** @type {any} */ res) => {
-    const { id } = req.params;
-    db.get(
-      "SELECT * FROM courses WHERE id = ?",
-      id,
-      (/** @type {any} */ error, /** @type {any} */ data) => {
-        if (error) {
-          req.flash("warning", "Ошибка запроса к базе данных");
-          res.redirect(app.reverse("courses"));
-          return;
-        }
-        if (!data) {
-          req.flash("warning", "Курс не найден");
-          res.code(404).send("Not found");
-          return;
-        }
-        const templateData = {
-          course: data,
-          flash: res.flash(),
-        };
-        res.view("courses/show", templateData);
-      },
-    );
+  app.get("/courses/:id", { name: "course" }, (req, res) => {
+    const course = db.prepare("SELECT * FROM courses WHERE id = ?").get(req.params.id);
+
+    if (!course) {
+      res.code(404).send("Course not found");
+      return;
+    }
+
+    res.view("courses/show", { course, flash: res.flash() });
   });
 
   // Создание курса
-  app.post(
-    "/courses",
-    {
-      attachValidation: true,
-      schema: {
-        body: yup.object({
-          title: yup.string().min(2),
-        }),
-      },
-      /** @param {any} schema */
-      validatorCompiler:
-        ({ schema }) =>
-        (/** @type {any} */ data) => {
-          try {
-            const result = schema.validateSync(data);
-            return { value: result };
-          } catch (e) {
-            return { error: e };
-          }
-        },
-    },
-    (/** @type {any} */ req, /** @type {any} */ res) => {
-      const { title, description } = req.body;
+  app.post("/courses", { attachValidation: true, schema: courseSchema }, (req, res) => {
+    const { title, description } = req.body;
 
-      if (req.validationError) {
-        req.flash("warning", req.validationError);
-        const data = {
-          title,
-          description,
-          flash: res.flash(),
-        };
+    if (req.validationError) {
+      req.flash("warning", req.validationError.message);
+      res.view("courses/new", { title, description, flash: res.flash() });
+      return;
+    }
 
-        res.view("courses/new", data);
-        return;
-      }
+    db.prepare("INSERT INTO courses (title, description) VALUES (?, ?)").run(title, description);
 
-      const course = {
-        title,
-        description,
-      };
-
-      const stmt = db.prepare("INSERT INTO courses(title, description) VALUES(?, ?)");
-      stmt.run([course.title, course.description], (/** @type {any} */ err) => {
-        if (err) {
-          req.flash("warning", "Ошибка создания курса");
-          res.code(500);
-          return;
-        }
-        req.flash("success", "Курс успешно создан");
-        res.redirect(app.reverse("courses"));
-      });
-    },
-  );
+    req.flash("success", "Курс успешно создан");
+    res.redirect(app.reverse("courses"));
+  });
 
   // Форма редактирования курса
-  app.get(
-    "/courses/:id/edit",
-    { name: "editCourse" },
-    (/** @type {any} */ req, /** @type {any} */ res) => {
-      const { id } = req.params;
-      db.get(
-        "SELECT * FROM courses WHERE id = ?",
-        id,
-        (/** @type {any} */ error, /** @type {any} */ data) => {
-          if (error) {
-            req.flash("warning", "Курс не найден");
-            res.redirect(app.reverse("courses"));
-            return;
-          }
-          const templateData = {
-            course: data,
-            flash: res.flash(),
-          };
-          res.view("courses/edit", templateData);
-        },
-      );
-    },
-  );
+  app.get("/courses/:id/edit", { name: "editCourse" }, (req, res) => {
+    const course = db.prepare("SELECT * FROM courses WHERE id = ?").get(req.params.id);
+
+    if (!course) {
+      res.code(404).send("Course not found");
+      return;
+    }
+
+    res.view("courses/edit", { course, flash: res.flash() });
+  });
 
   // Обновление курса
-  app.patch(
-    "/courses/:id",
-    {
-      attachValidation: true,
-      schema: {
-        body: yup.object({
-          title: yup.string().min(2),
-        }),
-      },
-      /** @param {any} schema */
-      validatorCompiler:
-        ({ schema }) =>
-        (/** @type {any} */ data) => {
-          try {
-            const result = schema.validateSync(data);
-            return { value: result };
-          } catch (e) {
-            return { error: e };
-          }
-        },
-    },
-    (/** @type {any} */ req, /** @type {any} */ res) => {
-      const { id } = req.params;
-      const { title, description } = req.body;
+  app.patch("/courses/:id", { attachValidation: true, schema: courseSchema }, (req, res) => {
+    const { id } = req.params;
+    const { title, description } = req.body;
 
-      if (req.validationError) {
-        req.flash("warning", req.validationError);
-        const data = {
-          title,
-          description,
-          flash: res.flash(),
-        };
+    if (req.validationError) {
+      req.flash("warning", req.validationError.message);
+      res.view("courses/edit", { course: { id, title, description }, flash: res.flash() });
+      return;
+    }
 
-        res.view("courses/new", data);
-        return;
-      }
+    db.prepare("UPDATE courses SET title = ?, description = ? WHERE id = ?").run(
+      title,
+      description,
+      id,
+    );
 
-      const course = {
-        title,
-        description,
-      };
-
-      const stmt = db.prepare("UPDATE courses SET title = ?, description = ? WHERE id = ?");
-      stmt.run([course.title, course.description, id], (/** @type {any} */ err) => {
-        if (err) {
-          req.flash("warning", "Ошибка редактирования курса");
-          res.code(500);
-          return;
-        }
-        req.flash("success", "Курс успешно отредактирован");
-        res.redirect(app.reverse("courses"));
-      });
-    },
-  );
+    req.flash("success", "Курс успешно отредактирован");
+    res.redirect(app.reverse("courses"));
+  });
 
   // Удаление курса
-  app.delete("/courses/:id", (/** @type {any} */ req, /** @type {any} */ res) => {
-    const { id } = req.params;
-    const stmt = db.prepare("DELETE FROM courses WHERE id = ?");
-    stmt.run(id, (/** @type {any} */ err) => {
-      if (err) {
-        req.flash("warning", "Ошибка удаления курса");
-        res.code(500);
-        return;
-      }
-      req.flash("success", "Курс успешно удален");
-      res.redirect(app.reverse("courses"));
-    });
+  app.delete("/courses/:id", (req, res) => {
+    db.prepare("DELETE FROM courses WHERE id = ?").run(req.params.id);
+
+    req.flash("success", "Курс успешно удален");
+    res.redirect(app.reverse("courses"));
   });
 };

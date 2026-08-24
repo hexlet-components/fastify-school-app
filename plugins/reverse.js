@@ -1,5 +1,3 @@
-// @ts-check
-
 import fp from "fastify-plugin";
 
 // Именованные маршруты и app.reverse(name).
