@@ -10,85 +10,86 @@ export default async (app, _opts) => {
   const { db } = app;
 
   // Просмотр списка курсов
-  app.get("/courses", { name: "courses" }, (req, res) => {
+  app.get("/courses", { name: "courses" }, async (req, res) => {
     const { title } = req.query;
 
-    const courses = title
-      ? db.prepare("SELECT * FROM courses WHERE title LIKE ?").all(`%${title}%`)
-      : db.prepare("SELECT * FROM courses").all();
+    const { rows: courses } = title
+      ? await db.query("SELECT * FROM courses WHERE title ILIKE $1", [`%${title}%`])
+      : await db.query("SELECT * FROM courses");
 
-    res.view("courses/index", { courses, flash: res.flash() });
+    return res.view("courses/index", { courses, flash: res.flash() });
   });
 
   // Форма создания нового курса
   app.get("/courses/new", { name: "newCourse" }, (_req, res) => res.view("courses/new"));
 
   // Просмотр конкретного курса
-  app.get("/courses/:id", { name: "course" }, (req, res) => {
-    const course = db.prepare("SELECT * FROM courses WHERE id = ?").get(req.params.id);
+  app.get("/courses/:id", { name: "course" }, async (req, res) => {
+    const { rows } = await db.query("SELECT * FROM courses WHERE id = $1", [req.params.id]);
+    const course = rows[0];
 
     if (!course) {
-      res.code(404).send("Course not found");
-      return;
+      return res.code(404).send("Course not found");
     }
 
-    res.view("courses/show", { course, flash: res.flash() });
+    return res.view("courses/show", { course, flash: res.flash() });
   });
 
   // Создание курса
-  app.post("/courses", { attachValidation: true, schema: courseSchema }, (req, res) => {
+  app.post("/courses", { attachValidation: true, schema: courseSchema }, async (req, res) => {
     const { title, description } = req.body;
 
     if (req.validationError) {
       req.flash("warning", req.validationError.message);
-      res.view("courses/new", { title, description, flash: res.flash() });
-      return;
+      return res.view("courses/new", { title, description, flash: res.flash() });
     }
 
-    db.prepare("INSERT INTO courses (title, description) VALUES (?, ?)").run(title, description);
+    await db.query("INSERT INTO courses (title, description) VALUES ($1, $2)", [
+      title,
+      description,
+    ]);
 
     req.flash("success", "Курс успешно создан");
-    res.redirect(app.reverse("courses"));
+    return res.redirect(app.reverse("courses"));
   });
 
   // Форма редактирования курса
-  app.get("/courses/:id/edit", { name: "editCourse" }, (req, res) => {
-    const course = db.prepare("SELECT * FROM courses WHERE id = ?").get(req.params.id);
+  app.get("/courses/:id/edit", { name: "editCourse" }, async (req, res) => {
+    const { rows } = await db.query("SELECT * FROM courses WHERE id = $1", [req.params.id]);
+    const course = rows[0];
 
     if (!course) {
-      res.code(404).send("Course not found");
-      return;
+      return res.code(404).send("Course not found");
     }
 
-    res.view("courses/edit", { course, flash: res.flash() });
+    return res.view("courses/edit", { course, flash: res.flash() });
   });
 
   // Обновление курса
-  app.patch("/courses/:id", { attachValidation: true, schema: courseSchema }, (req, res) => {
+  app.patch("/courses/:id", { attachValidation: true, schema: courseSchema }, async (req, res) => {
     const { id } = req.params;
     const { title, description } = req.body;
 
     if (req.validationError) {
       req.flash("warning", req.validationError.message);
-      res.view("courses/edit", { course: { id, title, description }, flash: res.flash() });
-      return;
+      return res.view("courses/edit", { course: { id, title, description }, flash: res.flash() });
     }
 
-    db.prepare("UPDATE courses SET title = ?, description = ? WHERE id = ?").run(
+    await db.query("UPDATE courses SET title = $1, description = $2 WHERE id = $3", [
       title,
       description,
       id,
-    );
+    ]);
 
     req.flash("success", "Курс успешно отредактирован");
-    res.redirect(app.reverse("courses"));
+    return res.redirect(app.reverse("courses"));
   });
 
   // Удаление курса
-  app.delete("/courses/:id", (req, res) => {
-    db.prepare("DELETE FROM courses WHERE id = ?").run(req.params.id);
+  app.delete("/courses/:id", async (req, res) => {
+    await db.query("DELETE FROM courses WHERE id = $1", [req.params.id]);
 
     req.flash("success", "Курс успешно удален");
-    res.redirect(app.reverse("courses"));
+    return res.redirect(app.reverse("courses"));
   });
 };

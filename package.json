@@ -21,6 +21,7 @@
     "node": ">=26.0"
   },
   "dependencies": {
+    "@electric-sql/pglite": "^0.5.7",
     "@fastify/autoload": "^6.0.0",
     "@fastify/cookie": "^11.1.2",
     "@fastify/flash": "^6.0.3",

@@ -15,10 +15,10 @@ export default async (app, _opts) => {
   const { db } = app;
 
   // Просмотр списка пользователей
-  app.get("/users", { name: "users" }, (_req, res) => {
-    const users = db.prepare("SELECT * FROM users").all();
+  app.get("/users", { name: "users" }, async (_req, res) => {
+    const { rows: users } = await db.query("SELECT * FROM users");
 
-    res.view("users/index", { users, flash: res.flash() });
+    return res.view("users/index", { users, flash: res.flash() });
   });
 
   // Форма создания нового пользователя
@@ -27,76 +27,74 @@ export default async (app, _opts) => {
   );
 
   // Просмотр конкретного пользователя
-  app.get("/users/:id", { name: "user" }, (req, res) => {
-    const user = db.prepare("SELECT * FROM users WHERE id = ?").get(req.params.id);
+  app.get("/users/:id", { name: "user" }, async (req, res) => {
+    const { rows } = await db.query("SELECT * FROM users WHERE id = $1", [req.params.id]);
+    const user = rows[0];
 
     if (!user) {
-      res.code(404).send("User not found");
-      return;
+      return res.code(404).send("User not found");
     }
 
-    res.view("users/show", { user, flash: res.flash() });
+    return res.view("users/show", { user, flash: res.flash() });
   });
 
   // Создание пользователя
-  app.post("/users", { attachValidation: true, schema: userSchema }, (req, res) => {
+  app.post("/users", { attachValidation: true, schema: userSchema }, async (req, res) => {
     const { name, email, password } = req.body;
 
     if (req.validationError) {
       req.flash("warning", req.validationError.message);
-      res.view("users/new", { name, email, flash: res.flash() });
-      return;
+      return res.view("users/new", { name, email, flash: res.flash() });
     }
 
-    db.prepare("INSERT INTO users (name, email, password) VALUES (?, ?, ?)").run(
+    await db.query("INSERT INTO users (name, email, password) VALUES ($1, $2, $3)", [
       name,
       email,
       password,
-    );
+    ]);
 
     req.flash("success", "Пользователь успешно создан");
-    res.redirect(app.reverse("users"));
+    return res.redirect(app.reverse("users"));
   });
 
   // Форма редактирования пользователя
-  app.get("/users/:id/edit", { name: "editUser" }, (req, res) => {
-    const user = db.prepare("SELECT * FROM users WHERE id = ?").get(req.params.id);
+  app.get("/users/:id/edit", { name: "editUser" }, async (req, res) => {
+    const { rows } = await db.query("SELECT * FROM users WHERE id = $1", [req.params.id]);
+    const user = rows[0];
 
     if (!user) {
-      res.code(404).send("User not found");
-      return;
+      return res.code(404).send("User not found");
     }
 
-    res.view("users/edit", { user, flash: res.flash() });
+    return res.view("users/edit", { user, flash: res.flash() });
   });
 
   // Обновление пользователя
-  app.patch("/users/:id", { attachValidation: true, schema: userSchema }, (req, res) => {
+  app.patch("/users/:id", { attachValidation: true, schema: userSchema }, async (req, res) => {
     const { id } = req.params;
     const { name, email, password } = req.body;
 
     if (req.validationError) {
       req.flash("warning", req.validationError.message);
-      res.view("users/edit", { user: { id, name, email }, flash: res.flash() });
-      return;
+      return res.view("users/edit", { user: { id, name, email }, flash: res.flash() });
     }
 
-    db.prepare("UPDATE users SET name = ?, email = ?, password = ? WHERE id = ?").run(
+    await db.query("UPDATE users SET name = $1, email = $2, password = $3 WHERE id = $4", [
       name,
       email,
       password,
       id,
-    );
+    ]);
 
     req.flash("success", "Пользователь успешно отредактирован");
-    res.redirect(app.reverse("users"));
+    return res.redirect(app.reverse("users"));
   });
 
   // Удаление пользователя
-  app.delete("/users/:id", (req, res) => {
-    db.prepare("DELETE FROM users WHERE id = ?").run(req.params.id);
+  app.delete("/users/:id", async (req, res) => {
+    await db.query("DELETE FROM users WHERE id = $1", [req.params.id]);
 
     req.flash("success", "Пользователь успешно удален");
-    res.redirect(app.reverse("users"));
+    return res.redirect(app.reverse("users"));
   });
 };
