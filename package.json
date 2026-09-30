@@ -10,9 +10,9 @@
     "dev": "fastify start -w -o -l info -P app.js",
     "lint": "oxlint .",
     "test": "vitest run",
-    "lint:fix": "oxfmt --ignore-path=.oxfmtignore . && oxlint --fix .",
-    "format": "oxfmt --ignore-path=.oxfmtignore .",
-    "format:check": "oxfmt --ignore-path=.oxfmtignore --check ."
+    "lint:fix": "oxfmt . && oxlint --fix .",
+    "format": "oxfmt .",
+    "format:check": "oxfmt --check ."
   },
   "keywords": [],
   "author": "",
