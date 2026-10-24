@@ -21,27 +21,27 @@
     "node": ">=26.0"
   },
   "dependencies": {
-    "@electric-sql/pglite": "^0.5.8",
-    "@fastify/autoload": "^6.5.0",
-    "@fastify/cookie": "^11.1.2",
-    "@fastify/flash": "^6.0.5",
-    "@fastify/formbody": "^9.0.0",
-    "@fastify/secure-session": "^8.3.0",
-    "@fastify/static": "^10.1.3",
-    "@fastify/view": "^12.0.0",
+    "@electric-sql/pglite": "^0.5.11",
+    "@fastify/autoload": "^6.5.1",
+    "@fastify/cookie": "^11.1.3",
+    "@fastify/flash": "^6.0.6",
+    "@fastify/formbody": "^9.0.1",
+    "@fastify/secure-session": "^8.4.1",
+    "@fastify/static": "^10.1.7",
+    "@fastify/view": "^12.0.1",
     "eta": "^4.6.0",
-    "fastify": "^5.12.1",
-    "fastify-cli": "^8.0.0",
-    "fastify-plugin": "^6.0.0",
+    "fastify": "^5.12.7",
+    "fastify-cli": "^8.0.3",
+    "fastify-plugin": "^6.0.1",
     "yup": "^1.7.1"
   },
   "devDependencies": {
     "@tailwindcss/vite": "^4.3.3",
-    "oxfmt": "^0.65.0",
-    "oxlint": "^1.80.0",
+    "oxfmt": "^0.74.0",
+    "oxlint": "^1.89.0",
     "tailwindcss": "^4.3.3",
-    "vite": "^8.2.2",
-    "vitest": "^4.1.11"
+    "vite": "^8.3.5",
+    "vitest": "^4.1.12"
   },
   "packageManager": "pnpm@12.6.0"
 }
