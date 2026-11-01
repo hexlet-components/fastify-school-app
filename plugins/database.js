@@ -28,6 +28,13 @@ export default fp(async (fastify) => {
       content TEXT
     );
 
+    CREATE TABLE students (
+      id SERIAL PRIMARY KEY,
+      name VARCHAR(255) NOT NULL,
+      email VARCHAR(255) NOT NULL,
+      birth_year INTEGER NOT NULL
+    );
+
     CREATE TABLE users (
       id SERIAL PRIMARY KEY,
       name VARCHAR(255) NOT NULL,
@@ -63,6 +70,19 @@ export default fp(async (fastify) => {
     await db.query("INSERT INTO lessons (title, content) VALUES ($1, $2)", [
       lesson.title,
       lesson.content,
+    ]);
+  }
+
+  const students = [
+    { name: "Анна Иванова", email: "anna@example.com", birthYear: 2001 },
+    { name: "Борис Петров", email: "boris@example.com", birthYear: 1999 },
+  ];
+
+  for (const student of students) {
+    await db.query("INSERT INTO students (name, email, birth_year) VALUES ($1, $2, $3)", [
+      student.name,
+      student.email,
+      student.birthYear,
     ]);
   }
 

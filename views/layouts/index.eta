@@ -14,6 +14,7 @@
           <a class="text-sm text-gray-600 hover:text-gray-900" href="<%= it.route('courses') %>">Курсы</a>
           <a class="text-sm text-gray-600 hover:text-gray-900" href="<%= it.route('categories') %>">Категории</a>
           <a class="text-sm text-gray-600 hover:text-gray-900" href="<%= it.route('lessons') %>">Уроки</a>
+          <a class="text-sm text-gray-600 hover:text-gray-900" href="<%= it.route('students') %>">Студенты</a>
         </div>
       </div>
     </nav>
