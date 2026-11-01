@@ -3,6 +3,13 @@ import * as yup from "yup";
 const courseSchema = {
   body: yup.object({
     title: yup.string().min(2),
+    durationHours: yup
+      .number()
+      .transform((value, original) => (original === "" ? undefined : value))
+      .typeError("Длительность должна быть числом")
+      .integer("Длительность должна быть целым числом часов")
+      .positive("Длительность должна быть больше нуля")
+      .nullable(),
   }),
 };
 
@@ -37,16 +44,16 @@ export default async (app, _opts) => {
 
   // Создание курса
   app.post("/courses", { attachValidation: true, schema: courseSchema }, async (req, res) => {
-    const { title, description } = req.body;
+    const { title, description, durationHours } = req.body;
 
     if (req.validationError) {
       req.flash("warning", req.validationError.message);
-      return res.view("courses/new", { title, description, flash: res.flash() });
+      return res.view("courses/new", { title, description, durationHours, flash: res.flash() });
     }
 
     const { rows } = await db.query(
-      "INSERT INTO courses (title, description) VALUES ($1, $2) RETURNING id",
-      [title, description],
+      "INSERT INTO courses (title, description, duration_hours) VALUES ($1, $2, $3) RETURNING id",
+      [title, description, durationHours ?? null],
     );
 
     req.flash("success", "Курс успешно создан");
@@ -68,18 +75,20 @@ export default async (app, _opts) => {
   // Обновление курса
   app.patch("/courses/:id", { attachValidation: true, schema: courseSchema }, async (req, res) => {
     const { id } = req.params;
-    const { title, description } = req.body;
+    const { title, description, durationHours } = req.body;
 
     if (req.validationError) {
       req.flash("warning", req.validationError.message);
-      return res.view("courses/edit", { course: { id, title, description }, flash: res.flash() });
+      return res.view("courses/edit", {
+        course: { id, title, description, duration_hours: durationHours },
+        flash: res.flash(),
+      });
     }
 
-    await db.query("UPDATE courses SET title = $1, description = $2 WHERE id = $3", [
-      title,
-      description,
-      id,
-    ]);
+    await db.query(
+      "UPDATE courses SET title = $1, description = $2, duration_hours = $3 WHERE id = $4",
+      [title, description, durationHours ?? null, id],
+    );
 
     req.flash("success", "Курс успешно отредактирован");
     return res.redirect(app.reverse("courses"));

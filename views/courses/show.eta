@@ -9,6 +9,12 @@
       <dt class="text-gray-500">Описание</dt>
       <dd><%= it.course.description %></dd>
     </div>
+    <% if (it.course.duration_hours) { %>
+    <div class="mb-4 flex flex-wrap gap-2">
+      <dt class="text-gray-500">Длительность</dt>
+      <dd><%= it.course.duration_hours %> ч</dd>
+    </div>
+    <% } %>
   </dl>
   <div class="flex flex-wrap items-center gap-2">
     <a class="rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700" href="<%= it.route('editCourse', { id: it.course.id }) %>">Редактировать</a>
