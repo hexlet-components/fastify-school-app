@@ -22,6 +22,12 @@ export default fp(async (fastify) => {
       title VARCHAR(255) NOT NULL
     );
 
+    CREATE TABLE lessons (
+      id SERIAL PRIMARY KEY,
+      title VARCHAR(255) NOT NULL,
+      content TEXT
+    );
+
     CREATE TABLE users (
       id SERIAL PRIMARY KEY,
       name VARCHAR(255) NOT NULL,
@@ -46,6 +52,18 @@ export default fp(async (fastify) => {
 
   for (const category of categories) {
     await db.query("INSERT INTO categories (title) VALUES ($1)", [category.title]);
+  }
+
+  const lessons = [
+    { title: "Переменные", content: "Как объявлять переменные в JavaScript" },
+    { title: "Функции", content: "Как объявлять и вызывать функции" },
+  ];
+
+  for (const lesson of lessons) {
+    await db.query("INSERT INTO lessons (title, content) VALUES ($1, $2)", [
+      lesson.title,
+      lesson.content,
+    ]);
   }
 
   const users = [{ name: "admin", email: "admin@example.com", password: "admin" }];

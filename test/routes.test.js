@@ -145,6 +145,57 @@ describe("categories", () => {
   });
 });
 
+describe("lessons", () => {
+  it("отдаёт список", async () => {
+    const res = await app.inject({ method: "GET", url: "/lessons" });
+
+    expect(res.statusCode).toBe(200);
+    expect(res.payload).toContain("Переменные");
+  });
+
+  it("отдаёт 404 на несуществующий урок", async () => {
+    const res = await app.inject({ method: "GET", url: "/lessons/999" });
+
+    expect(res.statusCode).toBe(404);
+  });
+
+  it("создаёт урок", async () => {
+    const res = await app.inject({
+      method: "POST",
+      url: "/lessons",
+      ...form({ title: "Циклы", content: "Как писать циклы" }),
+    });
+
+    expect(res.statusCode).toBe(302);
+    expect(res.headers.location).toBe("/lessons");
+
+    const list = await app.inject({ method: "GET", url: "/lessons" });
+    expect(list.payload).toContain("Циклы");
+  });
+
+  it("не создаёт урок с коротким названием", async () => {
+    const res = await app.inject({
+      method: "POST",
+      url: "/lessons",
+      ...form({ title: "ab", content: "" }),
+    });
+
+    expect(res.statusCode).toBe(200);
+
+    const list = await app.inject({ method: "GET", url: "/lessons" });
+    expect(list.payload).not.toContain(">ab<");
+  });
+
+  it("удаляет урок", async () => {
+    const res = await app.inject({ method: "DELETE", url: "/lessons/1" });
+
+    expect(res.statusCode).toBe(302);
+
+    const list = await app.inject({ method: "GET", url: "/lessons" });
+    expect(list.payload).not.toContain("Переменные");
+  });
+});
+
 describe("users", () => {
   it("отдаёт страницу пользователя", async () => {
     const res = await app.inject({ method: "GET", url: "/users/1" });
