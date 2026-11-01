@@ -67,6 +67,38 @@ describe("courses", () => {
     expect(list.payload).not.toContain(">a<");
   });
 
+  it("сохраняет длительность курса", async () => {
+    await app.inject({
+      method: "POST",
+      url: "/courses",
+      ...form({ title: "Python", description: "", durationHours: "40" }),
+    });
+
+    const res = await app.inject({ method: "GET", url: "/courses/3" });
+    expect(res.payload).toContain("40 ч");
+  });
+
+  it("принимает пустую длительность", async () => {
+    const res = await app.inject({
+      method: "POST",
+      url: "/courses",
+      ...form({ title: "Python", description: "", durationHours: "" }),
+    });
+
+    expect(res.statusCode).toBe(302);
+  });
+
+  it.each(["0", "-5", "2.5", "abc"])("не создаёт курс с длительностью %s", async (value) => {
+    const res = await app.inject({
+      method: "POST",
+      url: "/courses",
+      ...form({ title: "Python", description: "", durationHours: value }),
+    });
+
+    expect(res.statusCode).toBe(200);
+    expect(res.payload).toMatch(/Длительность должна/);
+  });
+
   it("удаляет курс", async () => {
     const res = await app.inject({ method: "DELETE", url: "/courses/1" });
 

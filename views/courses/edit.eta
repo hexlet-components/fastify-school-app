@@ -11,6 +11,11 @@
       <textarea class="w-full rounded border border-gray-300 px-3 py-2" id="description" name="description" rows="4"><%= it.course.description %></textarea>
     </div>
 
+    <div class="mb-4">
+      <label class="mb-1 block text-sm font-medium" for="durationHours">Длительность, часов</label>
+      <input class="w-full rounded border border-gray-300 px-3 py-2" id="durationHours" name="durationHours" inputmode="numeric" value="<%= it.course.duration_hours ?? '' %>">
+    </div>
+
     <input class="cursor-pointer rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700" type="submit" value="Сохранить">
   </form>
 </div>

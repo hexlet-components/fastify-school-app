@@ -14,7 +14,8 @@ export default fp(async (fastify) => {
     CREATE TABLE courses (
       id SERIAL PRIMARY KEY,
       title VARCHAR(255) NOT NULL,
-      description TEXT
+      description TEXT,
+      duration_hours INTEGER CHECK (duration_hours > 0)
     );
 
     CREATE TABLE users (
