@@ -17,6 +17,11 @@ export default fp(async (fastify) => {
       description TEXT
     );
 
+    CREATE TABLE categories (
+      id SERIAL PRIMARY KEY,
+      title VARCHAR(255) NOT NULL
+    );
+
     CREATE TABLE users (
       id SERIAL PRIMARY KEY,
       name VARCHAR(255) NOT NULL,
@@ -35,6 +40,12 @@ export default fp(async (fastify) => {
       course.title,
       course.description,
     ]);
+  }
+
+  const categories = [{ title: "Программирование" }, { title: "Дизайн" }];
+
+  for (const category of categories) {
+    await db.query("INSERT INTO categories (title) VALUES ($1)", [category.title]);
   }
 
   const users = [{ name: "admin", email: "admin@example.com", password: "admin" }];
