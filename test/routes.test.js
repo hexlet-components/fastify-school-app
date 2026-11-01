@@ -77,6 +77,59 @@ describe("courses", () => {
   });
 });
 
+describe("students", () => {
+  it("отдаёт список", async () => {
+    const res = await app.inject({ method: "GET", url: "/students" });
+
+    expect(res.statusCode).toBe(200);
+    expect(res.payload).toContain("Анна Иванова");
+  });
+
+  it("отдаёт 404 на несуществующего студента", async () => {
+    const res = await app.inject({ method: "GET", url: "/students/999" });
+
+    expect(res.statusCode).toBe(404);
+  });
+
+  it("создаёт студента", async () => {
+    const res = await app.inject({
+      method: "POST",
+      url: "/students",
+      ...form({ name: "Виктор Сидоров", email: "viktor@example.com", birthYear: "2000" }),
+    });
+
+    expect(res.statusCode).toBe(302);
+    expect(res.headers.location).toBe("/students");
+
+    const list = await app.inject({ method: "GET", url: "/students" });
+    expect(list.payload).toContain("viktor@example.com");
+  });
+
+  it("не создаёт студента с неверным email или годом", async () => {
+    for (const payload of [
+      { name: "Виктор Сидоров", email: "not-an-email", birthYear: "2000" },
+      { name: "Виктор Сидоров", email: "viktor@example.com", birthYear: "abc" },
+    ]) {
+      const res = await app.inject({ method: "POST", url: "/students", ...form(payload) });
+
+      expect(res.statusCode).toBe(200);
+    }
+
+    const list = await app.inject({ method: "GET", url: "/students" });
+    expect(list.payload).not.toContain("viktor@example.com");
+    expect(list.payload).not.toContain("not-an-email");
+  });
+
+  it("удаляет студента", async () => {
+    const res = await app.inject({ method: "DELETE", url: "/students/1" });
+
+    expect(res.statusCode).toBe(302);
+
+    const list = await app.inject({ method: "GET", url: "/students" });
+    expect(list.payload).not.toContain("Анна Иванова");
+  });
+});
+
 describe("users", () => {
   it("отдаёт страницу пользователя", async () => {
     const res = await app.inject({ method: "GET", url: "/users/1" });
