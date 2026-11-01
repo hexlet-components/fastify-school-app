@@ -44,13 +44,13 @@ export default async (app, _opts) => {
       return res.view("courses/new", { title, description, flash: res.flash() });
     }
 
-    await db.query("INSERT INTO courses (title, description) VALUES ($1, $2)", [
-      title,
-      description,
-    ]);
+    const { rows } = await db.query(
+      "INSERT INTO courses (title, description) VALUES ($1, $2) RETURNING id",
+      [title, description],
+    );
 
     req.flash("success", "Курс успешно создан");
-    return res.redirect(app.reverse("courses"));
+    return res.redirect(app.reverse("course", { id: rows[0].id }));
   });
 
   // Форма редактирования курса

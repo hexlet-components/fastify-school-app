@@ -48,10 +48,13 @@ describe("courses", () => {
     });
 
     expect(res.statusCode).toBe(302);
-    expect(res.headers.location).toBe("/courses");
+    const location = res.headers.location;
+    expect(location).toMatch(/^\/courses\/\d+$/);
 
-    const list = await app.inject({ method: "GET", url: "/courses" });
-    expect(list.payload).toContain("Python");
+    const cookie = String(res.headers["set-cookie"]).split(";")[0];
+    const page = await app.inject({ method: "GET", url: location, headers: { cookie } });
+    expect(page.payload).toContain("Python");
+    expect(page.payload).toContain("Курс успешно создан");
   });
 
   it("не создаёт курс с коротким названием", async () => {
