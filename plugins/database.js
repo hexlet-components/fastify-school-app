@@ -14,7 +14,26 @@ export default fp(async (fastify) => {
     CREATE TABLE courses (
       id SERIAL PRIMARY KEY,
       title VARCHAR(255) NOT NULL,
-      description TEXT
+      description TEXT,
+      duration_hours INTEGER CHECK (duration_hours > 0)
+    );
+
+    CREATE TABLE categories (
+      id SERIAL PRIMARY KEY,
+      title VARCHAR(255) NOT NULL
+    );
+
+    CREATE TABLE lessons (
+      id SERIAL PRIMARY KEY,
+      title VARCHAR(255) NOT NULL,
+      content TEXT
+    );
+
+    CREATE TABLE students (
+      id SERIAL PRIMARY KEY,
+      name VARCHAR(255) NOT NULL,
+      email VARCHAR(255) NOT NULL,
+      birth_year INTEGER NOT NULL
     );
 
     CREATE TABLE users (
@@ -22,6 +41,12 @@ export default fp(async (fastify) => {
       name VARCHAR(255) NOT NULL,
       email VARCHAR(255) NOT NULL,
       password VARCHAR(255) NOT NULL
+    );
+
+    CREATE TABLE teachers (
+      id SERIAL PRIMARY KEY,
+      name VARCHAR(255) NOT NULL,
+      email VARCHAR(255) NOT NULL
     );
   `);
 
@@ -37,6 +62,37 @@ export default fp(async (fastify) => {
     ]);
   }
 
+  const categories = [{ title: "Программирование" }, { title: "Дизайн" }];
+
+  for (const category of categories) {
+    await db.query("INSERT INTO categories (title) VALUES ($1)", [category.title]);
+  }
+
+  const lessons = [
+    { title: "Переменные", content: "Как объявлять переменные в JavaScript" },
+    { title: "Функции", content: "Как объявлять и вызывать функции" },
+  ];
+
+  for (const lesson of lessons) {
+    await db.query("INSERT INTO lessons (title, content) VALUES ($1, $2)", [
+      lesson.title,
+      lesson.content,
+    ]);
+  }
+
+  const students = [
+    { name: "Анна Иванова", email: "anna@example.com", birthYear: 2001 },
+    { name: "Борис Петров", email: "boris@example.com", birthYear: 1999 },
+  ];
+
+  for (const student of students) {
+    await db.query("INSERT INTO students (name, email, birth_year) VALUES ($1, $2, $3)", [
+      student.name,
+      student.email,
+      student.birthYear,
+    ]);
+  }
+
   const users = [{ name: "admin", email: "admin@example.com", password: "admin" }];
 
   for (const user of users) {
@@ -44,6 +100,18 @@ export default fp(async (fastify) => {
       user.name,
       user.email,
       user.password,
+    ]);
+  }
+
+  const teachers = [
+    { name: "Анна Петрова", email: "anna@example.com" },
+    { name: "Борис Иванов", email: "boris@example.com" },
+  ];
+
+  for (const teacher of teachers) {
+    await db.query("INSERT INTO teachers (name, email) VALUES ($1, $2)", [
+      teacher.name,
+      teacher.email,
     ]);
   }
 
