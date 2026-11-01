@@ -77,6 +77,71 @@ describe("courses", () => {
   });
 });
 
+describe("categories", () => {
+  it("отдаёт список", async () => {
+    const res = await app.inject({ method: "GET", url: "/categories" });
+
+    expect(res.statusCode).toBe(200);
+    expect(res.payload).toContain("Программирование");
+    expect(res.payload).toContain("Дизайн");
+  });
+
+  it("ищет по названию", async () => {
+    const res = await app.inject({ method: "GET", url: "/categories?title=дизай" });
+
+    expect(res.payload).toContain("Дизайн");
+    expect(res.payload).not.toContain("Программирование");
+  });
+
+  it("отдаёт 404 на несуществующую категорию", async () => {
+    const res = await app.inject({ method: "GET", url: "/categories/999" });
+
+    expect(res.statusCode).toBe(404);
+  });
+
+  it("создаёт категорию", async () => {
+    const res = await app.inject({
+      method: "POST",
+      url: "/categories",
+      ...form({ title: "Маркетинг" }),
+    });
+
+    expect(res.statusCode).toBe(302);
+    expect(res.headers.location).toBe("/categories");
+
+    const list = await app.inject({ method: "GET", url: "/categories" });
+    expect(list.payload).toContain("Маркетинг");
+  });
+
+  it("не создаёт категорию с коротким названием", async () => {
+    const res = await app.inject({ method: "POST", url: "/categories", ...form({ title: "a" }) });
+
+    expect(res.statusCode).toBe(200);
+  });
+
+  it("обновляет категорию", async () => {
+    const res = await app.inject({
+      method: "POST",
+      url: "/categories/1?_method=PATCH",
+      ...form({ title: "Разработка" }),
+    });
+
+    expect(res.statusCode).toBe(302);
+
+    const show = await app.inject({ method: "GET", url: "/categories/1" });
+    expect(show.payload).toContain("Разработка");
+  });
+
+  it("удаляет категорию", async () => {
+    const res = await app.inject({ method: "DELETE", url: "/categories/1" });
+
+    expect(res.statusCode).toBe(302);
+
+    const list = await app.inject({ method: "GET", url: "/categories" });
+    expect(list.payload).not.toContain("Программирование");
+  });
+});
+
 describe("users", () => {
   it("отдаёт страницу пользователя", async () => {
     const res = await app.inject({ method: "GET", url: "/users/1" });
