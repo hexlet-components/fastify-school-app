@@ -17,6 +17,12 @@ export default fp(async (fastify) => {
       description TEXT
     );
 
+    CREATE TABLE lessons (
+      id SERIAL PRIMARY KEY,
+      title VARCHAR(255) NOT NULL,
+      content TEXT
+    );
+
     CREATE TABLE users (
       id SERIAL PRIMARY KEY,
       name VARCHAR(255) NOT NULL,
@@ -34,6 +40,18 @@ export default fp(async (fastify) => {
     await db.query("INSERT INTO courses (title, description) VALUES ($1, $2)", [
       course.title,
       course.description,
+    ]);
+  }
+
+  const lessons = [
+    { title: "Переменные", content: "Как объявлять переменные в JavaScript" },
+    { title: "Функции", content: "Как объявлять и вызывать функции" },
+  ];
+
+  for (const lesson of lessons) {
+    await db.query("INSERT INTO lessons (title, content) VALUES ($1, $2)", [
+      lesson.title,
+      lesson.content,
     ]);
   }
 
