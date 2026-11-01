@@ -1,10 +1,14 @@
 // @ts-check
 
 import tailwindcss from "@tailwindcss/vite";
-import { defineConfig } from "vite";
+import { configDefaults, defineConfig } from "vitest/config";
 
 export default defineConfig({
   plugins: [tailwindcss()],
+  test: {
+    // В .claude/worktrees лежат чужие копии репозитория со своими тестами.
+    exclude: [...configDefaults.exclude, ".claude/**"],
+  },
   build: {
     outDir: "dist",
     // Точка входа это css, а не js: своего кода на клиенте у приложения нет,
