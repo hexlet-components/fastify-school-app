@@ -42,6 +42,12 @@ export default fp(async (fastify) => {
       email VARCHAR(255) NOT NULL,
       password VARCHAR(255) NOT NULL
     );
+
+    CREATE TABLE teachers (
+      id SERIAL PRIMARY KEY,
+      name VARCHAR(255) NOT NULL,
+      email VARCHAR(255) NOT NULL
+    );
   `);
 
   const courses = [
@@ -94,6 +100,18 @@ export default fp(async (fastify) => {
       user.name,
       user.email,
       user.password,
+    ]);
+  }
+
+  const teachers = [
+    { name: "Анна Петрова", email: "anna@example.com" },
+    { name: "Борис Иванов", email: "boris@example.com" },
+  ];
+
+  for (const teacher of teachers) {
+    await db.query("INSERT INTO teachers (name, email) VALUES ($1, $2)", [
+      teacher.name,
+      teacher.email,
     ]);
   }
 

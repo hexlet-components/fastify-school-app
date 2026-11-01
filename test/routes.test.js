@@ -281,6 +281,57 @@ describe("students", () => {
   });
 });
 
+describe("teachers", () => {
+  it("отдаёт список", async () => {
+    const res = await app.inject({ method: "GET", url: "/teachers" });
+
+    expect(res.statusCode).toBe(200);
+    expect(res.payload).toContain("Анна Петрова");
+  });
+
+  it("отдаёт 404 на несуществующего преподавателя", async () => {
+    const res = await app.inject({ method: "GET", url: "/teachers/999" });
+
+    expect(res.statusCode).toBe(404);
+  });
+
+  it("создаёт преподавателя", async () => {
+    const res = await app.inject({
+      method: "POST",
+      url: "/teachers",
+      ...form({ name: "Виктор Сидоров", email: "viktor@example.com" }),
+    });
+
+    expect(res.statusCode).toBe(302);
+    expect(res.headers.location).toBe("/teachers");
+
+    const list = await app.inject({ method: "GET", url: "/teachers" });
+    expect(list.payload).toContain("Виктор Сидоров");
+  });
+
+  it("не создаёт преподавателя с неверным email", async () => {
+    const res = await app.inject({
+      method: "POST",
+      url: "/teachers",
+      ...form({ name: "Георгий", email: "not-an-email" }),
+    });
+
+    expect(res.statusCode).toBe(200);
+
+    const list = await app.inject({ method: "GET", url: "/teachers" });
+    expect(list.payload).not.toContain("Георгий");
+  });
+
+  it("удаляет преподавателя", async () => {
+    const res = await app.inject({ method: "DELETE", url: "/teachers/1" });
+
+    expect(res.statusCode).toBe(302);
+
+    const list = await app.inject({ method: "GET", url: "/teachers" });
+    expect(list.payload).not.toContain("Анна Петрова");
+  });
+});
+
 describe("users", () => {
   it("отдаёт страницу пользователя", async () => {
     const res = await app.inject({ method: "GET", url: "/users/1" });
