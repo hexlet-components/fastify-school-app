@@ -12,7 +12,10 @@
   </dl>
   <div class="flex flex-wrap items-center gap-2">
     <a class="rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700" href="<%= it.route('editUser', { id: it.user.id }) %>">Редактировать</a>
-    <form action="<%= it.route('user', { id: it.user.id }) %>?_method=DELETE" method="post">
+    <form action="<%= it.route('resetUserPassword', { id: it.user.id }) %>" method="post">
+      <input class="cursor-pointer rounded bg-yellow-600 px-4 py-2 text-white hover:bg-yellow-700" type="submit" value="Сбросить пароль">
+    </form>
+    <form action="<%= it.route('user',{ id: it.user.id }) %>?_method=DELETE" method="post">
       <input class="cursor-pointer rounded bg-red-600 px-4 py-2 text-white hover:bg-red-700" type="submit" value="Удалить">
     </form>
   </div>

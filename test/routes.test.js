@@ -85,6 +85,13 @@ describe("users", () => {
     expect(res.payload).toContain("admin@example.com");
   });
 
+  it("сбрасывает пароль и возвращает на страницу пользователя", async () => {
+    const res = await app.inject({ method: "POST", url: "/users/1/reset-password" });
+
+    expect(res.statusCode).toBe(302);
+    expect(res.headers.location).toBe("/users/1");
+  });
+
   it("не создаёт пользователя с неверным подтверждением пароля", async () => {
     const res = await app.inject({
       method: "POST",

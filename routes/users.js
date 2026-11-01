@@ -90,6 +90,22 @@ export default async (app, _opts) => {
     return res.redirect(app.reverse("users"));
   });
 
+  // Сброс пароля пользователя
+  app.post("/users/:id/reset-password", { name: "resetUserPassword" }, async (req, res) => {
+    const { id } = req.params;
+    const { rowCount } = await db.query("UPDATE users SET password = $1 WHERE id = $2", [
+      "changeme",
+      id,
+    ]);
+
+    if (rowCount === 0) {
+      return res.code(404).send("User not found");
+    }
+
+    req.flash("success", "Пароль сброшен");
+    return res.redirect(app.reverse("user", { id }));
+  });
+
   // Удаление пользователя
   app.delete("/users/:id", async (req, res) => {
     await db.query("DELETE FROM users WHERE id = $1", [req.params.id]);
